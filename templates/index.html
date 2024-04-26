@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{#{% load bootstrap4 %}#}
+
+{% block content %}
+  <h1>CAD Project Manager</h1>
+
+  <h3>Hell, {{ user.username|default:'Guest' }}!</h3>
+  <div>
+    {% if user.is_authenticated %}
+      <a href="{% url 'users:logout' %}">Logout</a>
+      <a href="{% url 'users:password_change' %}">Change password</a>
+    {% else %}
+      <a href="{% url 'users:login' %}">Login</a>
+    {% endif %}
+  </div>
+{% endblock %}
