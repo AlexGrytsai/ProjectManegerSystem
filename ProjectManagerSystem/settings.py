@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "debug_toolbar",
+    "bootstrap4",
+    "crispy_forms",
     "users",
 ]
 
@@ -91,7 +93,7 @@ DATABASES = {
         "PASSWORD": aws_postgres.password,
         "HOST": aws_postgres.endpoint,
         "PORT": aws_postgres.port,
-     }
+    }
 }
 
 # Password management in Django
@@ -142,6 +144,10 @@ STATIC_URL = "static/"
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"
+
+CRISPY_TEMPLATE_PACK = "bootstrap4"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
