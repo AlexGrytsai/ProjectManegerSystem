@@ -9,10 +9,11 @@ https://docs.djangoproject.com/en/5.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 from credentials import aws_postgres
+from credentials import aws_s3
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -38,6 +39,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "debug_toolbar",
+    "storages",
     "bootstrap4",
     "crispy_forms",
     "users",
@@ -138,7 +140,37 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
+# https://django-storages.readthedocs.io/en/latest/
+# https://boto3.amazonaws.com/v1/documentation/api/latest/index.html
 
+USE_S3 = os.getenv("USE_S3") == "TRUE"
+
+if USE_S3:
+    # aws settings
+    AWS_ACCESS_KEY_ID = os.getenv(aws_s3.access_key)
+    AWS_SECRET_ACCESS_KEY = os.getenv(aws_s3.secret_key)
+    AWS_STORAGE_BUCKET_NAME = os.getenv(aws_s3.bucket_name)
+    AWS_DEFAULT_ACL = None
+    AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com"
+    AWS_S3_OBJECT_PARAMETERS = {"CacheControl": "max-age=86400"}
+    # s3 static settings
+    # STATIC_LOCATION = "static"
+    # STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/{STATIC_LOCATION}/"
+    # STATICFILES_STORAGE = "hello_django.storage_backends.StaticStorage"
+    # s3 public media settings
+    PUBLIC_MEDIA_LOCATION = "media"
+    MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/"
+    DEFAULT_FILE_STORAGE = "hello_django.storage_backends.PublicMediaStorage"
+    # s3 private media settings
+    PRIVATE_MEDIA_LOCATION = "private"
+    PRIVATE_FILE_STORAGE = "hello_django.storage_backends.PrivateMediaStorage"
+else:
+    # STATIC_URL = "static/"
+    # STATIC_ROOT = os.path.join(BASE_DIR, "static")
+    MEDIA_URL = "/mediafiles/"
+    MEDIA_ROOT = os.path.join(BASE_DIR, "mediafiles")
+
+# STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
 STATIC_URL = "static/"
 
 STATICFILES_DIRS = [
