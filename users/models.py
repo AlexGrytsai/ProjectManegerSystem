@@ -3,36 +3,31 @@ from django.db import models
 from django.urls import reverse
 
 
-class Position(models.Model):
-    POSITION_CHOICES = (
-        ("Developer", "Developer"),
-        ("Project Manager", "Project Manager"),
-        ("QA", "QA"),
-        ("Designer", "Designer"),
-        ("DevOps", "DevOps"),
+class Position(models.TextChoices):
+    UNCONFIRMED = "Unconfirmed", "Unconfirmed"
+    DEVELOPER = "Developer", "Developer"
+    PROJECT_MANAGER = "Project Manager", "Project Manager"
+    QA = "QA", "QA"
+    DESIGNER = "Designer", "Designer"
+    DEVOPS = "DevOps", "DevOps"
+
+
+class Title(models.TextChoices):
+    UNCONFIRMED = "Unconfirmed", "Unconfirmed"
+    ENGINEER = "Engineer", "Engineer"
+    MANAGER = "Manager", "Manager"
+    TEAM_LEAD = "Team Lead", "Team Lead"
+    TECHNICAL_LEAD = "Technical Lead", "Technical Lead"
+    CTO = "CTO", "CTO"
+
+
+class WorkerUser(AbstractUser):
+    title = models.CharField(
+        max_length=64, choices=Title.choices, default=Title.UNCONFIRMED
     )
-
-    name = models.CharField(max_length=64, choices=POSITION_CHOICES)
-
-
-class Title(models.Model):
-    TITLE_CHOICES = (
-        ("Team Lead", "Team Lead"),
-        ("Technical Lead", "Technical Lead"),
-        ("CTO", "CTO"),
+    position = models.CharField(
+        max_length=64, choices=Position.choices, default=Title.UNCONFIRMED
     )
-
-    name = models.CharField(max_length=64, choices=TITLE_CHOICES)
-
-
-class Worker(AbstractUser):
-    position = models.ForeignKey(
-        Position,
-        on_delete=models.CASCADE,
-        null=True,
-        blank=True
-    )
-
     phone_number = models.CharField(max_length=20, null=True, blank=True)
     telegram = models.CharField(max_length=20, null=True, blank=True)
     photo = models.ImageField(
@@ -43,28 +38,38 @@ class Worker(AbstractUser):
         help_text="Upload your photo"
     )
 
-    class Meta:
-        verbose_name = "worker"
-        verbose_name_plural = "workers"
+    is_supervisor = models.BooleanField(
+        default=False,
+        help_text="Defines or will have access to special "
+                  "supervisor permissions"
+    )
 
     def __str__(self):
-        return f"{self.username} ({self.position})"
+        return f"{self.username}"
 
     def get_absolute_url(self):
         return reverse("users:worker-detail", kwargs={"pk": self.pk})
 
 
-class Supervisor(Worker):
-    title = models.ForeignKey(
-        Title,
+class Supervisor(models.Model):
+    user = models.OneToOneField(
+        WorkerUser,
         on_delete=models.CASCADE,
-        null=True,
-        blank=True
+        primary_key=True,
     )
 
     class Meta:
         verbose_name = "supervisor"
         verbose_name_plural = "supervisors"
 
-    def __str__(self):
-        return f"{self.username} ({self.title})"
+
+class Worker(models.Model):
+    user = models.OneToOneField(
+        WorkerUser,
+        on_delete=models.CASCADE,
+        primary_key=True,
+    )
+
+    class Meta:
+        verbose_name = "worker"
+        verbose_name_plural = "workers"
