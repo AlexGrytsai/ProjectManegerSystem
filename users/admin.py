@@ -64,6 +64,8 @@ class WorkerUserAdmin(UserAdmin):
         ),
     )
 
+    list_filter = ["title", "position", "is_supervisor"]
+
 
 @admin.register(Supervisor)
 class SupervisorAdmin(admin.ModelAdmin):
