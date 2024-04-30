@@ -49,19 +49,20 @@ class WorkerUserAdmin(UserAdmin):
         UserAdmin.fieldsets[3],
     )
 
-    # add_fieldsets = UserAdmin.add_fieldsets[0] #+ (
-    #     (
-    #       "Additional info", {
-    #           "fields": (
-    #               "is_active",
-    #               "title",
-    #               "position",
-    #               "phone_number",
-    #               "telegram", "is_supervisor"
-    #           )
-    #       }
-    #     ),
-    # )
+    add_fieldsets = UserAdmin.add_fieldsets + (
+        (
+          "Additional info", {
+              "fields": (
+                  "title",
+                  "position",
+                  "is_supervisor",
+                  "phone_number",
+                  "telegram",
+                  "photo",
+              )
+          }
+        ),
+    )
 
 
 @admin.register(Supervisor)
