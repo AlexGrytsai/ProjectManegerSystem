@@ -34,7 +34,7 @@ class WorkerUser(AbstractUser):
         null=True,
         blank=True,
         unique=True,
-        help_text="Phone number"
+        help_text="Phone number (+3XX XXX XXX XXX)"
     )
     telegram = models.CharField(
         max_length=20,
@@ -47,8 +47,8 @@ class WorkerUser(AbstractUser):
         upload_to="media/users/photos/",
         null=True,
         blank=True,
-        unique=True,
-        help_text="Upload your photo"
+        unique=False,
+        help_text="Upload your photo",
     )
 
     is_supervisor = models.BooleanField(
