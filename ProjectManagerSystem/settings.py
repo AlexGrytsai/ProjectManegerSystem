@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "storages",
     "bootstrap4",
     "crispy_forms",
+    "crispy_bootstrap4",
     "users",
 ]
 
