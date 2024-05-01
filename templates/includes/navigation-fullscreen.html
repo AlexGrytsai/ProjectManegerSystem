@@ -1,12 +1,17 @@
-<nav id="navbar-main" class="navbar navbar-horizontal navbar-transparent navbar-main navbar-expand-lg navbar-light">
+<nav id="navbar-main"
+     class="navbar navbar-horizontal navbar-transparent navbar-main navbar-expand-lg navbar-light">
   <div class="container">
     <a class="navbar-brand" href="/">
-      <img src="/static/img/cad_icon.png" alt="CAD.Project System - Template Starter Logo.">
+      <img src="/static/img/cad_icon.png"
+           alt="CAD.Project System - Template Starter Logo.">
     </a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbar-collapse" aria-controls="navbar-collapse"
+            aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="navbar-collapse navbar-custom-collapse collapse" id="navbar-collapse">
+    <div class="navbar-collapse navbar-custom-collapse collapse"
+         id="navbar-collapse">
       <div class="navbar-collapse-header">
         <div class="row">
           <div class="col-6 collapse-brand">
@@ -15,7 +20,10 @@
             </a>
           </div>
           <div class="col-6 collapse-close">
-            <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
+            <button type="button" class="navbar-toggler" data-toggle="collapse"
+                    data-target="#navbar-collapse"
+                    aria-controls="navbar-collapse" aria-expanded="false"
+                    aria-label="Toggle navigation">
               <span></span>
               <span></span>
             </button>
@@ -24,19 +32,28 @@
       </div>
       <ul class="navbar-nav mr-auto">
         <li class="nav-item">
-          <a href="" class="nav-link">
-{#          <a href="{% url 'login' %}" class="nav-link">#}
-            <span class="nav-link-inner--text">Login</span>
-          </a>
+          {% if user.is_authenticated %}
+            <form method="post" action="{% url 'users:logout' %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-link nav-link">LogOut
+              </button>
+            </form>
+          {% else %}
+            <a href="{% url 'users:login' %}" class="nav-link">
+              <span class="nav-link-inner--text">Login</span>
+            </a>
+          {% endif %}
         </li>
         <li class="nav-item">
-{#          <a href="{% url 'register' %}" class="nav-link">#}
+          {% if not user.is_authenticated %}
+          {#          <a href="{% url 'register' %}" class="nav-link">#}
           <a href="#" class="nav-link">
             <span class="nav-link-inner--text">Register</span>
           </a>
+          {% endif %}
         </li>
       </ul>
-      <hr class="d-lg-none" />
+      <hr class="d-lg-none"/>
       </ul>
     </div>
   </div>
