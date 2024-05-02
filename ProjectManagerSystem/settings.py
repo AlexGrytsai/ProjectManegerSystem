@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "debug_toolbar",
     "storages",
+    "social_django",
     "bootstrap4",
     "crispy_forms",
     "crispy_bootstrap4",
@@ -70,6 +71,8 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "social_django.context_processors.backends",
+                "social_django.context_processors.login_redirect",
             ],
         },
     },
@@ -99,6 +102,9 @@ DATABASES = {
 #     }
 # }
 
+# For Django Social Auth (need use with Postgres)
+# SOCIAL_AUTH_JSONFIELD_ENABLED = True
+
 # Password management in Django
 # https://docs.djangoproject.com/en/5.0/topics/auth/passwords/
 
@@ -127,6 +133,11 @@ AUTH_PASSWORD_VALIDATORS = [
         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
+
+AUTHENTICATION_BACKENDS = (
+    "social_core.backends.github.GithubOAuth2",
+    "django.contrib.auth.backends.ModelBackend",
+)
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
