@@ -5,29 +5,26 @@ from django.urls import reverse
 
 
 class Position(models.TextChoices):
-    UNCONFIRMED = "Unconfirmed", "Unconfirmed"
+    GUEST = "Guest", "Guest"
     DEVELOPER = "Developer", "Developer"
     PROJECT_MANAGER = "Project Manager", "Project Manager"
+    PRODUCT_MANAGER = "Product Manager", "Product Manager"
     QA = "QA", "QA"
     DESIGNER = "Designer", "Designer"
     DEVOPS = "DevOps", "DevOps"
 
 
-class Title(models.TextChoices):
-    UNCONFIRMED = "Unconfirmed", "Unconfirmed"
-    ENGINEER = "Engineer", "Engineer"
-    MANAGER = "Manager", "Manager"
-    TEAM_LEAD = "Team Lead", "Team Lead"
-    TECHNICAL_LEAD = "Technical Lead", "Technical Lead"
-    CTO = "CTO", "CTO"
+class Role(models.TextChoices):
+    ENGINEER_MANAGER = "Engineer/Manager", "Engineer/Manager"
+    SUPERVISOR = "Supervisor", "Supervisor"
 
 
 class WorkerUser(AbstractUser):
     title = models.CharField(
-        max_length=64, choices=Title.choices, default=Title.UNCONFIRMED
+        max_length=64, choices=Role.choices, default=Role.ENGINEER_MANAGER
     )
     position = models.CharField(
-        max_length=64, choices=Position.choices, default=Title.UNCONFIRMED
+        max_length=64, choices=Position.choices, default=Position.GUEST
     )
     phone_number = models.CharField(
         max_length=20,
@@ -89,27 +86,3 @@ class WorkerUser(AbstractUser):
 
     def get_absolute_url(self):
         return reverse("users:worker-detail", kwargs={"pk": self.pk})
-
-
-class Supervisor(models.Model):
-    user = models.OneToOneField(
-        WorkerUser,
-        on_delete=models.CASCADE,
-        primary_key=True,
-    )
-
-    class Meta:
-        verbose_name = "supervisor"
-        verbose_name_plural = "supervisors"
-
-
-class Worker(models.Model):
-    user = models.OneToOneField(
-        WorkerUser,
-        on_delete=models.CASCADE,
-        primary_key=True,
-    )
-
-    class Meta:
-        verbose_name = "worker"
-        verbose_name_plural = "workers"
