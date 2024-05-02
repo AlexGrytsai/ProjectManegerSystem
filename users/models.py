@@ -16,13 +16,14 @@ class Position(models.TextChoices):
 
 
 class Role(models.TextChoices):
+    GUEST = "Guest", "Guest"
     ENGINEER_MANAGER = "Engineer/Manager", "Engineer/Manager"
     SUPERVISOR = "Supervisor", "Supervisor"
 
 
 class WorkerUser(AbstractUser):
     role = models.CharField(
-        max_length=64, choices=Role.choices, default=Role.ENGINEER_MANAGER
+        max_length=64, choices=Role.choices, default=Role.GUEST
     )
     position = models.CharField(
         max_length=64, choices=Position.choices, default=Position.GUEST
