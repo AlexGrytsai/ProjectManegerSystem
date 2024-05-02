@@ -2,8 +2,6 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
 from .models import WorkerUser
-from .models import Worker
-from .models import Supervisor
 
 
 @admin.register(WorkerUser)
@@ -51,27 +49,17 @@ class WorkerUserAdmin(UserAdmin):
 
     add_fieldsets = UserAdmin.add_fieldsets + (
         (
-          "Additional info", {
-              "fields": (
-                  "title",
-                  "position",
-                  "is_supervisor",
-                  "phone_number",
-                  "telegram",
-                  "photo",
-              )
-          }
+            "Additional info", {
+                "fields": (
+                    "title",
+                    "position",
+                    "is_supervisor",
+                    "phone_number",
+                    "telegram",
+                    "photo",
+                )
+            }
         ),
     )
 
     list_filter = ["title", "position", "is_supervisor"]
-
-
-@admin.register(Supervisor)
-class SupervisorAdmin(admin.ModelAdmin):
-    pass
-
-
-@admin.register(Worker)
-class WorkerAdmin(admin.ModelAdmin):
-    pass
