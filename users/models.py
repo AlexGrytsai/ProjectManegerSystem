@@ -21,10 +21,10 @@ class Role(models.TextChoices):
 
 
 class WorkerUser(AbstractUser):
-    title = models.CharField(
+    role = models.CharField(
         max_length=64, choices=Role.choices, default=Role.ENGINEER_MANAGER
     )
-    role = models.CharField(
+    position = models.CharField(
         max_length=64, choices=Position.choices, default=Position.GUEST
     )
     phone_number = models.CharField(
