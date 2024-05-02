@@ -9,7 +9,7 @@ class WorkerUserAdmin(UserAdmin):
     list_display = UserAdmin.list_display + (
         "is_active",
         "title",
-        "position",
+        "role",
         "phone_number",
         "telegram",
         "is_supervisor",
@@ -19,7 +19,7 @@ class WorkerUserAdmin(UserAdmin):
         "Details info", {
             "fields": (
                 "title",
-                "position",
+                "role",
                 "phone_number",
                 "telegram",
                 "photo",
@@ -52,7 +52,7 @@ class WorkerUserAdmin(UserAdmin):
             "Additional info", {
                 "fields": (
                     "title",
-                    "position",
+                    "role",
                     "is_supervisor",
                     "phone_number",
                     "telegram",
@@ -62,4 +62,4 @@ class WorkerUserAdmin(UserAdmin):
         ),
     )
 
-    list_filter = ["title", "position", "is_supervisor"]
+    list_filter = ["title", "role", "is_supervisor"]
