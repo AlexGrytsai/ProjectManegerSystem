@@ -22,5 +22,6 @@ from django.urls import include
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("__debug__/", include("debug_toolbar.urls")),
+    path("social-auth/", include("social_django.urls", namespace="social")),
     path("", include("users.urls", namespace="users")),
 ]

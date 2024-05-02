@@ -14,6 +14,7 @@ from pathlib import Path
 
 from credentials import aws_postgres
 from credentials import aws_s3
+from credentials import social_auth
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -56,6 +57,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "social_django.middleware.SocialAuthExceptionMiddleware",
 ]
 
 ROOT_URLCONF = "ProjectManagerSystem.urls"
@@ -134,10 +136,17 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-AUTHENTICATION_BACKENDS = (
-    "social_core.backends.github.GithubOAuth2",
+AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
-)
+    "social_core.backends.github.GithubOAuth2",
+    "social_core.backends.facebook.FacebookOAuth2",
+]
+
+SOCIAL_AUTH_GITHUB_KEY = social_auth.github_key
+SOCIAL_AUTH_GITHUB_SECRET = social_auth.github_secret
+
+SOCIAL_AUTH_FACEBOOK_KEY = social_auth.facebook_key
+SOCIAL_AUTH_FACEBOOK_SECRET = social_auth.facebook_secret
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
