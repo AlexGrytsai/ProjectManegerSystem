@@ -12,6 +12,7 @@ class Position(models.TextChoices):
     QA = "QA", "QA"
     DESIGNER = "Designer", "Designer"
     DEVOPS = "DevOps", "DevOps"
+    TEAM_LEAD = "Team Lead", "Team Lead"
 
 
 class Role(models.TextChoices):
@@ -23,7 +24,7 @@ class WorkerUser(AbstractUser):
     title = models.CharField(
         max_length=64, choices=Role.choices, default=Role.ENGINEER_MANAGER
     )
-    position = models.CharField(
+    role = models.CharField(
         max_length=64, choices=Position.choices, default=Position.GUEST
     )
     phone_number = models.CharField(
