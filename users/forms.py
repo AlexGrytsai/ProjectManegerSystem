@@ -10,6 +10,4 @@ class RegisterForm(UserCreationForm):
             "email",
             "first_name",
             "last_name",
-            "title",
-            "position"
         )
