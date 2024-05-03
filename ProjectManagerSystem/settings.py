@@ -170,15 +170,22 @@ STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
 
-AWS_ACCESS_KEY_ID = aws_s3.access_key
-AWS_SECRET_ACCESS_KEY = aws_s3.secret_key
-AWS_STORAGE_BUCKET_NAME = aws_s3.bucket_name
-AWS_S3_CUSTOM_DOMAIN = "%s.s3.amazonaws.com" % AWS_STORAGE_BUCKET_NAME
-AWS_S3_OBJECT_PARAMETERS = {
-    "CacheControl": "max-age=86400"
-}
+#AWS S3
+USE_S3 = True
 
-DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+if USE_S3:
+    AWS_ACCESS_KEY_ID = aws_s3.access_key
+    AWS_SECRET_ACCESS_KEY = aws_s3.secret_key
+    AWS_STORAGE_BUCKET_NAME = aws_s3.bucket_name
+    AWS_DEFAULT_ACL = None
+    AWS_S3_CUSTOM_DOMAIN = "%s.s3.amazonaws.com" % AWS_STORAGE_BUCKET_NAME
+    AWS_S3_OBJECT_PARAMETERS = {
+        "CacheControl": "max-age=86400"
+    }
+    DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+else:
+    MEDIA_URL = "/mediafiles/"
+    MEDIA_ROOT = os.path.join(BASE_DIR, "mediafiles")
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"
 
