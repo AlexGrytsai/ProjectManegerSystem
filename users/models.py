@@ -40,7 +40,7 @@ class WorkerUser(AbstractUser):
         null=True,
         blank=True,
         unique=True,
-        help_text="Telegram username"
+        help_text="Telegram username (@username)"
     )
     photo = models.ImageField(
         upload_to="media/users/photos/",
@@ -75,6 +75,8 @@ class WorkerUser(AbstractUser):
                     "Telegram username should start with '@'.")
             if len(self.telegram) < 2:
                 raise ValidationError("Telegram username is too short.")
+
+            self.telegram = self.telegram[1:]
 
         if self.photo:
             max_photo_size = 2097152

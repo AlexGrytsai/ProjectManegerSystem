@@ -171,7 +171,7 @@ STATICFILES_DIRS = [
 ]
 
 #AWS S3
-USE_S3 = True
+USE_S3 = False
 
 if USE_S3:
     AWS_ACCESS_KEY_ID = aws_s3.access_key
@@ -185,7 +185,7 @@ if USE_S3:
     DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 else:
     MEDIA_URL = "/mediafiles/"
-    MEDIA_ROOT = os.path.join(BASE_DIR, "mediafiles")
+    MEDIA_ROOT = BASE_DIR / "mediafiles"
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"
 
