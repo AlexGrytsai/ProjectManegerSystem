@@ -1,0 +1,264 @@
+[
+  {
+    "model": "users.workeruser",
+    "pk": 2,
+    "fields": {
+      "password": "pbkdf2_sha256$320000$6uM28XWOFX6ewyloJzjqmt$L+ZhofPylneoaL2iZS4sZu4ZMUNb4oIevfAdzOMn/eE=",
+      "last_login": "2022-08-08T14:14:03Z",
+      "is_superuser": false,
+      "username": "gary",
+      "first_name": "Gary",
+      "last_name": "Stevens",
+      "email": "gary@io.com",
+      "position": "Developer",
+      "role": "Engineer/Manager",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2022-08-08T13:58:29Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.workeruser",
+    "pk": 3,
+    "fields": {
+      "password": "pbkdf2_sha256$320000$73Z1Y57bcoscZ37s9rE9v0$4SEQ0TtXwJKzO5/CRdFSrTifatiPjkZ38gM2H8Kqsdg=",
+      "last_login": "2022-09-08T14:14:03Z",
+      "is_superuser": false,
+      "username": "joyce.byers",
+      "first_name": "Joyce",
+      "last_name": "Byers",
+      "email": "joyce.byers@company.com",
+      "position": "Project Manager",
+      "role": "Engineer/Manager",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2022-08-08T13:58:29Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.workeruser",
+    "pk": 4,
+    "fields": {
+      "password": "pbkdf2_sha256$320000$QtPol3T7x9quBj4BnbnVwW$UwT4kihkRfSvQEWEeuqVKwMgis2ikKVZfJDBcQMvOKY=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "jim.hopper",
+      "first_name": "Jim",
+      "last_name": "Hopper",
+      "email": "jim.hopper@company.com",
+      "position": "Product Manager",
+      "role": "Engineer/Manager",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2022-08-08T14:19:09Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.workeruser",
+    "pk": 5,
+    "fields": {
+      "password": "pbkdf2_sha256$320000$9yU0PLTDKlL02PedUtk2l1$LKjj8O1xGiPGEkDpjsHk87db1iLgt8dgDqECzcsivio",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "jonathan.byers",
+      "first_name": "Jonathan",
+      "last_name": "Byers",
+      "email": "jonathan.byers@company.com",
+      "position": "QA",
+      "role": "Engineer/Manager",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2022-08-08T14:19:09Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.workeruser",
+    "pk": 6,
+    "fields": {
+      "password": "pbkdf2_sha256$320000$9yU0PLTDKlL02PedUtk2l1$LKjj8O1xGiPGEkDpjsHk87db1iLgt8dgDqECzcsivio",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "dustin.henderson",
+      "first_name": "Dustin",
+      "last_name": "Henderson",
+      "email": "dustin.henderson@company.com",
+      "position": "Designer",
+      "role": "Engineer/Manager",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2022-08-09T14:19:09Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.workeruser",
+    "pk": 7,
+    "fields": {
+      "password": "pbkdf2_sha256$320000$9yU0PLTDKlL02PedUtk2l2$LKjj8O1xGiPGEkDpjsHk87db1iLgt8dgDqECzcsivio",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "mike.wheeler",
+      "first_name": "Mike",
+      "last_name": "Wheeler",
+      "email": "mike.wheeler@company.com",
+      "position": "DevOps",
+      "role": "Engineer/Manager",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2022-08-09T14:19:09Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.workeruser",
+    "pk": 8,
+    "fields": {
+      "password": "pbkdf2_sha256$320000$9yU0PLTDKlL02PedUtk2l2$LKjj8O1xGiPGEkDpjsHk87db1iLgt8dgDqECzcsivio",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "lucas.sinclair",
+      "first_name": "Lucas",
+      "last_name": "Sinclair",
+      "email": "lucas.sinclair@company.com",
+      "position": "Team Lead",
+      "role": "Supervisor",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2022-08-09T14:19:09Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.workeruser",
+    "pk": 9,
+    "fields": {
+      "password": "pbkdf2_sha256$320000$9yU0PLTDKlL02PedUtk2l3$LKjj8O1xGiPGEkDpjsHk87db1iLgt8dgDqECzcsivio",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "nancy.wheeler",
+      "first_name": "Nancy",
+      "last_name": "Wheeler",
+      "email": "nancy.wheeler@company.com",
+      "position": "Developer",
+      "role": "Engineer/Manager",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2022-08-10T14:19:09Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.workeruser",
+    "pk": 10,
+    "fields": {
+      "password": "pbkdf2_sha256$320000$9yU0PLTDKlL02PedUtk2l4$LKjj8O1xGiPGEkDpjsHk87db1iLgt8dgDqECzcsivio",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "steve.harrington",
+      "first_name": "Steve",
+      "last_name": "Harrington",
+      "email": "steve.harrington@company.com",
+      "position": "Developer",
+      "role": "Engineer/Manager",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2022-08-10T14:19:09Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.workeruser",
+    "pk": 11,
+    "fields": {
+      "password": "pbkdf2_sha256$320000$9yU0PLTDKlL02PedUtk2l5$LKjj8O1xGiPGEkDpjsHk87db1iLgt8dgDqECzcsivio",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "max.mayfield",
+      "first_name": "Max",
+      "last_name": "Mayfield",
+      "email": "max.mayfield@company.com",
+      "position": "Developer",
+      "role": "Engineer/Manager",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2022-08-10T14:19:09Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.workeruser",
+    "pk": 12,
+    "fields": {
+      "password": "pbkdf2_sha256$320000$2y5p7G48fCXc1PxGzE7gdk$FMO3lW1K3wK7v6pTtslwW2SBpRIzPCow6Az3iL2w63E",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "eleven",
+      "first_name": "Eleven",
+      "last_name": "Unknown",
+      "email": "eleven@company.com",
+      "position": "Project Manager",
+      "role": "Engineer/Manager",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2022-08-11T14:19:09Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.workeruser",
+    "pk": 13,
+    "fields": {
+      "password": "pbkdf2_sha256$320000$3Y5p7G48fCXc1PxGzE7gdk$FMO3lW1K3wK7v6pTtslwW2SBpRIzPCow6Az3iL2w63E",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "billy",
+      "first_name": "Billy",
+      "last_name": "Unknown",
+      "email": "billy@company.com",
+      "position": "Project Manager",
+      "role": "Engineer/Manager",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2022-08-12T14:19:09Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.workeruser",
+    "pk": 14,
+    "fields": {
+      "password": "pbkdf2_sha256$320000$4Y5p7G48fCXc1PxGzE7gdk$FMO3lW1K3wK7v6pTtslwW2SBpRIzPCow6Az3iL2w63E",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "will",
+      "first_name": "Will",
+      "last_name": "Unknown",
+      "email": "will@company.com",
+      "position": "Project Manager",
+      "role": "Engineer/Manager",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2022-08-13T14:19:09Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  }
+
+]
+
