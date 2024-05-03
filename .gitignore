@@ -2,3 +2,5 @@
 .idea
 /credentials/
 mediafiles/
+tresh/
+db.sqlite3
