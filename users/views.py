@@ -8,7 +8,7 @@ from .forms import RegisterForm
 from .models import WorkerUser
 
 
-class IndexView(TemplateView):
+class IndexView(LoginRequiredMixin,TemplateView):
     template_name = "index.html"
 
 

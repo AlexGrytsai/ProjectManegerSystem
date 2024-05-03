@@ -83,7 +83,7 @@ class WorkerUser(AbstractUser):
             if self.photo.size > max_photo_size:
                 raise ValidationError(
                     f"Photo size is too large "
-                    f"(max. {max_photo_size/1024/1024}MB)"
+                    f"(max. {max_photo_size / 1024 / 1024}MB)"
                 )
 
     def __str__(self):
