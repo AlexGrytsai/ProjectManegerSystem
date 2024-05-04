@@ -3,8 +3,10 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView
 from django.views.generic import TemplateView
 from django.views.generic import DetailView
+from django.views.generic import UpdateView
 
 from .forms import RegisterForm
+from .forms import WorkerUserUpdateForm
 from .models import WorkerUser
 
 
@@ -24,12 +26,12 @@ class RegisterView(CreateView):
     success_url = reverse_lazy("users:login")
 
 
-class UserDetailView(LoginRequiredMixin, DetailView):
+class WorkerDetailView(LoginRequiredMixin, DetailView):
     model = WorkerUser
     template_name = "registration/profile.html"
 
     def get_context_data(self, **kwargs):
-        context = super(UserDetailView, self).get_context_data(**kwargs)
+        context = super(WorkerDetailView, self).get_context_data(**kwargs)
         user = self.get_object()
 
         if user.id != self.request.user.id:
@@ -47,3 +49,24 @@ class UserDetailView(LoginRequiredMixin, DetailView):
                 context["display_name"] = self.request.user.username
 
         return context
+
+
+class WorkerUpdateView(LoginRequiredMixin, UpdateView):
+    model = WorkerUser
+    form_class = WorkerUserUpdateForm
+    template_name = "users/worker_form.html"
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["user_role"] = self.request.user.role
+        return kwargs
+
+    def get_context_data(self, **kwargs):
+        context = super(WorkerUpdateView, self).get_context_data(**kwargs)
+        context["previous_page"] = self.request.META.get("HTTP_REFERER")
+        return context
+
+    def get_success_url(self):
+        return reverse_lazy(
+            "users:worker-detail", kwargs={"pk": self.object.id}
+        )
