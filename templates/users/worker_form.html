@@ -1,0 +1,13 @@
+{% extends "layouts/base.html" %}
+{% load crispy_forms_filters %}
+
+{% block content %}
+  <h1>Update information</h1>
+  <form action="" method="post" novalidate>
+    {% csrf_token %}
+    {{ form|crispy }}
+
+    <input type="submit" value="Save" class="btn btn-primary">
+    <a href="{{ previous_page }}" class="btn btn-danger">Cancel</a>
+  </form>
+{% endblock %}
