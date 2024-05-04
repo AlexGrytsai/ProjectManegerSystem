@@ -8,7 +8,7 @@ from .forms import RegisterForm
 from .models import WorkerUser
 
 
-class IndexView(LoginRequiredMixin,TemplateView):
+class IndexView(LoginRequiredMixin, TemplateView):
     template_name = "index.html"
 
 
@@ -27,3 +27,23 @@ class RegisterView(CreateView):
 class UserDetailView(LoginRequiredMixin, DetailView):
     model = WorkerUser
     template_name = "registration/profile.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(UserDetailView, self).get_context_data(**kwargs)
+        user = self.get_object()
+
+        if user.id != self.request.user.id:
+            context["display_position"] = user.position
+            if user.first_name and user.last_name:
+                context["display_name"] = f"{user.first_name} {user.last_name}"
+            else:
+                context["display_name"] = user.username
+        else:
+            context["display_position"] = self.request.user.position
+            if self.request.user.first_name and self.request.user.last_name:
+                context["display_name"] = (f"{self.request.user.first_name} "
+                                           f"{self.request.user.last_name}")
+            else:
+                context["display_name"] = self.request.user.username
+
+        return context

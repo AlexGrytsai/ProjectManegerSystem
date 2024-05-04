@@ -13,28 +13,14 @@
       <div class="row" style="white-space: nowrap">
         <div class="col-lg-7 col-md-10">
           <h1 class="display-2 text-white">
-            {% if object.id != request.user.id %}
-              {% if object.first_name and object.last_name %}
-                {{ object.first_name }} {{ object.last_name }}
-              {% else %}
-                {{ object.username }}
-              {% endif %}
-            {% else %}
-              {% if request.user.first_name and request.user.last_name %}
-                {{ request.user.first_name }} {{ request.user.first_name }}
-              {% else %}
-                {{ request.user.username }}
-              {% endif %}
-            {% endif %}
+            {{ display_name }}
           </h1>
           <p class="text-white mt-0 mb-5">
-            {% if object.id != request.user.id %}
-              {{ object.position }}<br>
-            {% else %}
-              {{ request.user.position }}<br>
-            {% endif %}
+            {{ display_position }}
           </p>
-          <a href="#!" class="btn btn-neutral">Edit profile</a>
+          {% if object.id == request.user.id or request.user.role == "Supervisor" %}
+            <a href="#!" class="btn btn-neutral">Edit profile</a>
+          {% endif %}
         </div>
       </div>
     </div>
@@ -65,29 +51,39 @@
               class="card-header text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4">
             <div class="d-flex justify-content-between">
               {% if object.telegram != None %}
-              <a href="https://t.me/{{ object.telegram }}" class="btn btn-neutral btn-icon">
-                  <span class="btn-inner--icon"><img src="/static/img/icons/common/telegram.svg" alt="Telegram logo"></span>
+                <a href="https://t.me/{{ object.telegram }}"
+                   class="btn btn-neutral btn-icon">
+                  <span class="btn-inner--icon"><img
+                      src="/static/img/icons/common/telegram.svg"
+                      alt="Telegram logo"></span>
                   <span class="btn-inner--text">Telegram</span>
                 </a>
               {% else %}
                 <abbr title="The user did not provide his Telegram account">
-                <button class="btn btn-secondary btn-icon" disabled>
-                  <span class="btn-inner--icon"><img src="/static/img/icons/common/telegram.svg" alt="Telegram logo"></span>
-                  <span class="btn-inner--text">Telegram</span>
-                </button>
+                  <button class="btn btn-secondary btn-icon" disabled>
+                    <span class="btn-inner--icon"><img
+                        src="/static/img/icons/common/telegram.svg"
+                        alt="Telegram logo"></span>
+                    <span class="btn-inner--text">Telegram</span>
+                  </button>
                 </abbr>
               {% endif %}
               {% if object.email %}
-              <a href="mailto:{{ object.email }}" class="btn btn-neutral btn-icon">
-                  <span class="btn-inner--icon"><img src="/static/img/icons/common/email.svg" alt="Email logo"></span>
+                <a href="mailto:{{ object.email }}"
+                   class="btn btn-neutral btn-icon">
+                  <span class="btn-inner--icon"><img
+                      src="/static/img/icons/common/email.svg"
+                      alt="Email logo"></span>
                   <span class="btn-inner--text">Email</span>
                 </a>
               {% else %}
                 <abbr title="The user did not provide his email">
-                <button class="btn btn-secondary btn-icon" disabled>
-                  <span class="btn-inner--icon"><img src="/static/img/icons/common/email.svg" alt="Email logo"></span>
-                  <span class="btn-inner--text">Email</span>
-                </button>
+                  <button class="btn btn-secondary btn-icon" disabled>
+                    <span class="btn-inner--icon"><img
+                        src="/static/img/icons/common/email.svg"
+                        alt="Email logo"></span>
+                    <span class="btn-inner--text">Email</span>
+                  </button>
                 </abbr>
               {% endif %}
             </div>
@@ -128,7 +124,8 @@
                       <label class="form-control-label" for="input-email">Email
                         address</label>
                       <input type="email" id="input-email" class="form-control"
-                             placeholder="Email" value="{{ object.email }}" disabled>
+                             placeholder="Email" value="{{ object.email }}"
+                             disabled>
                     </div>
                   </div>
                 </div>
@@ -163,8 +160,10 @@
                     <div class="form-group">
                       <label class="form-control-label"
                              for="input-city">Phone number</label>
-                      <input type="text" id="input-phone_number" class="form-control"
-                             placeholder="Phone number" value="{{ object.phone_number }}" disabled>
+                      <input type="text" id="input-phone_number"
+                             class="form-control"
+                             placeholder="Phone number"
+                             value="{{ object.phone_number }}" disabled>
                     </div>
                   </div>
                   <div class="col-lg-4">
@@ -177,9 +176,10 @@
                   </div>
                   <div class="col-lg-4">
                     <div class="form-group">
-                      <label class="form-control-label" for="input-email">Email</label>
+                      <label class="form-control-label"
+                             for="input-email">Email</label>
                       <input type="text" id="input-email"
-                             class="form-control" placeholder="Email" 
+                             class="form-control" placeholder="Email"
                              value="{{ object.email }}" disabled>
                     </div>
                   </div>
@@ -199,7 +199,7 @@
       </div>
     </div>
 
-{#    {% include "includes/footer.html" %}#}
+    {#    {% include "includes/footer.html" %}#}
 
   </div>
 
