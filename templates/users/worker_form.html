@@ -34,7 +34,7 @@
               </div>
               <div>
                 <input type="submit" value="Save" class="btn btn-primary">
-                <a href="{{ previous_page }}" class="btn btn-danger">Cancel</a>
+                <a href="{% url 'users:worker-detail' pk=object.pk %}" class="btn btn-danger">Cancel</a>
               </div>
           </div>
         </div>
