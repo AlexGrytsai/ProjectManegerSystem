@@ -1,13 +1,51 @@
-{% extends "layouts/base.html" %}
+{% extends 'layouts/base.html' %}
 {% load crispy_forms_filters %}
 
-{% block content %}
-  <h1>Update information</h1>
-  <form action="" method="post" novalidate>
-    {% csrf_token %}
-    {{ form|crispy }}
+{% block title %} Update information {% endblock title %}
 
-    <input type="submit" value="Save" class="btn btn-primary">
-    <a href="{{ previous_page }}" class="btn btn-danger">Cancel</a>
-  </form>
-{% endblock %}
+{% block content %}
+
+  <div class="header pb-6 d-flex align-items-center"
+       style="min-height: 300px; background-size: cover; background-position: center top;">
+    <!-- Mask -->
+    <span class="mask bg-gradient-default opacity-8"></span>
+    <!-- Header container -->
+  </div>
+  <!-- Page content -->
+  <div class="container-fluid mt--9">
+    <div class="row justify-content-center">
+      <div class="col-xl-6">
+        <div class="card">
+          <div class="card-body">
+            <h2 class="text-muted mb-4"><strong>Update information</strong>
+            </h2>
+            <form action="" method="post" novalidate>
+              {% csrf_token %}
+              {{ form|crispy }}
+              <div class="mb-5">
+                <a href="{% url 'users:password_change' %}"
+                   class="btn btn-outline-primary">
+                  Change password
+                </a>
+                <a href="{% url 'users:password_reset' %}"
+                   class="btn btn-outline-danger">
+                  Reset password
+                </a>
+              </div>
+              <div>
+                <input type="submit" value="Save" class="btn btn-primary">
+                <a href="{{ previous_page }}" class="btn btn-danger">Cancel</a>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {#    {% include "includes/footer.html" %}#}
+
+  </div>
+
+{% endblock content %}
+
+<!-- Specific JS goes HERE -->
+{% block javascripts %}{% endblock javascripts %}
