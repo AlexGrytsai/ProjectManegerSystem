@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import UserPassesTestMixin
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
 from django.views.generic import TemplateView
@@ -51,10 +52,16 @@ class WorkerDetailView(LoginRequiredMixin, DetailView):
         return context
 
 
-class WorkerUpdateView(LoginRequiredMixin, UpdateView):
+class WorkerUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = WorkerUser
     form_class = WorkerUserUpdateForm
     template_name = "users/worker_form.html"
+
+    def test_func(self):
+        return (
+                self.get_object().id == self.request.user.id or
+                self.request.user.role == "Supervisor"
+        )
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -63,7 +70,20 @@ class WorkerUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super(WorkerUpdateView, self).get_context_data(**kwargs)
-        context["previous_page"] = self.request.META.get("HTTP_REFERER")
+        user = self.get_object()
+        if user.id == self.request.user.id:
+            context["change_password"] = """
+                            <div class="mb-5">
+                                <a href="{% url 'users:password_change' %}"
+                                   class="btn btn-outline-primary">
+                                  Change password
+                                </a>
+                                <a href="{% url 'users:password_reset' %}"
+                                   class="btn btn-outline-danger">
+                                  Reset password
+                                </a>
+                            </div>
+            """
         return context
 
     def get_success_url(self):
