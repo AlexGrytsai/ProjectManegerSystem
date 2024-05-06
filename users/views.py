@@ -5,6 +5,7 @@ from django.views.generic import CreateView
 from django.views.generic import TemplateView
 from django.views.generic import DetailView
 from django.views.generic import UpdateView
+from django.views.generic import ListView
 
 from .forms import RegisterForm
 from .forms import WorkerUserUpdateForm
@@ -90,3 +91,10 @@ class WorkerUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return reverse_lazy(
             "users:worker-detail", kwargs={"pk": self.object.id}
         )
+
+
+class WorkerListView(LoginRequiredMixin, ListView):
+    model = WorkerUser
+    template_name = "users/worker_list.html"
+    context_object_name = "worker_list"
+    paginate_by = 5

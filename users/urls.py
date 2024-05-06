@@ -1,11 +1,11 @@
 from django.urls import include
 from django.urls import path
 
-from .views import IndexView
-from .views import ProfileView
-from .views import RegisterView
-from .views import WorkerDetailView
-from .views import WorkerUpdateView
+from .views import (IndexView, ProfileView,
+                    RegisterView,
+                    WorkerDetailView,
+                    WorkerUpdateView,
+                    WorkerListView)
 
 urlpatterns = [
     path("accounts/", include("django.contrib.auth.urls")),
@@ -21,6 +21,11 @@ urlpatterns = [
         "accounts/profile/<int:pk>/update/",
         WorkerUpdateView.as_view(),
         name="worker-update"
+    ),
+    path(
+        "accounts/workers/",
+        WorkerListView.as_view(),
+        name="worker-list"
     ),
 ]
 
