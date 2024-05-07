@@ -97,4 +97,4 @@ class WorkerListView(LoginRequiredMixin, ListView):
     model = WorkerUser
     template_name = "users/worker_list.html"
     context_object_name = "worker_list"
-    paginate_by = 5
+    paginate_by = 10
