@@ -15,6 +15,15 @@ class RegisterForm(UserCreationForm):
         )
 
 
+class AddWorkerForm(UserCreationForm):
+    class Meta(UserCreationForm.Meta):
+        model = WorkerUser
+        fields = UserCreationForm.Meta.fields + ("role",
+                                                 "position",
+                                                 "is_active",
+                                                 )
+
+
 class WorkerUserUpdateForm(forms.ModelForm):
     class Meta(UserCreationForm.Meta):
         model = WorkerUser

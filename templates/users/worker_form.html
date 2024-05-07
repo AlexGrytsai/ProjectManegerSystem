@@ -1,7 +1,13 @@
 {% extends 'layouts/base.html' %}
 {% load crispy_forms_filters %}
 
-{% block title %} Update information {% endblock title %}
+{% block title %}
+  {% if is_update %}
+    Update information
+  {% else %}
+    Add new worker
+  {% endif %}
+{% endblock title %}
 
 {% block content %}
 
@@ -17,7 +23,14 @@
       <div class="col-xl-6">
         <div class="card">
           <div class="card-body">
-            <h2 class="text-muted mb-4"><strong>Update information</strong>
+            <h2 class="text-muted mb-4">
+              <strong>
+                {% if is_update %}
+                  Update information
+                {% else %}
+                  Add new worker
+                {% endif %}
+              </strong>
             </h2>
             <form action="" method="post" novalidate>
               {% csrf_token %}
@@ -25,8 +38,7 @@
               {{ change_password|safe }}
               <div>
                 <input type="submit" value="Save" class="btn btn-primary">
-                <a href="{% url 'users:worker-detail' pk=object.pk %}"
-                   class="btn btn-danger">Cancel</a>
+                <a href="{{ referer }}" class="btn btn-danger">Cancel</a>
               </div>
           </div>
         </div>

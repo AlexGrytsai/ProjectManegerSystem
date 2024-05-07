@@ -2,11 +2,12 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
-from django.views.generic import TemplateView
 from django.views.generic import DetailView
-from django.views.generic import UpdateView
 from django.views.generic import ListView
+from django.views.generic import TemplateView
+from django.views.generic import UpdateView
 
+from .forms import AddWorkerForm
 from .forms import RegisterForm
 from .forms import WorkerUserUpdateForm
 from .models import WorkerUser
@@ -26,6 +27,22 @@ class RegisterView(CreateView):
     template_name = "registration/register_form.html"
 
     success_url = reverse_lazy("users:login")
+
+
+class AddWorkerView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
+    model = WorkerUser
+    form_class = AddWorkerForm
+    success_url = reverse_lazy("users:worker-list")
+    template_name = "users/worker_form.html"
+
+    def test_func(self):
+        return self.request.user.role == "Supervisor"
+
+    def get_context_data(self, **kwargs):
+        context = super(AddWorkerView, self).get_context_data(**kwargs)
+        context["referer"] = self.request.META.get("HTTP_REFERER")
+        context["is_update"] = False
+        return context
 
 
 class WorkerDetailView(LoginRequiredMixin, DetailView):
@@ -67,11 +84,13 @@ class WorkerUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs["user_role"] = self.request.user.role
+
         return kwargs
 
     def get_context_data(self, **kwargs):
         context = super(WorkerUpdateView, self).get_context_data(**kwargs)
         user = self.get_object()
+        context["is_update"] = True
         if user.id == self.request.user.id:
             context["change_password"] = """
                             <div class="mb-5">
@@ -88,6 +107,10 @@ class WorkerUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return context
 
     def get_success_url(self):
+        # referer = self.request.META.get("HTTP_REFERER")
+        # if referer:
+        #     return referer
+        # else:
         return reverse_lazy(
             "users:worker-detail", kwargs={"pk": self.object.id}
         )

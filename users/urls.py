@@ -1,17 +1,20 @@
 from django.urls import include
 from django.urls import path
 
-from .views import (IndexView, ProfileView,
+from .views import (IndexView,
+                    ProfileView,
                     RegisterView,
                     WorkerDetailView,
                     WorkerUpdateView,
-                    WorkerListView)
+                    WorkerListView,
+                    AddWorkerView)
 
 urlpatterns = [
     path("accounts/", include("django.contrib.auth.urls")),
     path("", IndexView.as_view(), name="index"),
     path("accounts/profile/", ProfileView.as_view(), name="profile"),
     path("register/", RegisterView.as_view(), name="register-user"),
+    path("addworker/", AddWorkerView.as_view(), name="add-worker"),
     path(
         "accounts/profile/<int:pk>/",
         WorkerDetailView.as_view(),
