@@ -50,6 +50,14 @@ class WorkerUser(AbstractUser):
         help_text="Upload your photo",
     )
 
+    is_active = models.BooleanField(
+                                    default=False,
+                                    help_text=(
+                                        "Designates whether this user "
+                                        "should be treated as active. "
+                                    ),
+                                    )
+
     is_supervisor = models.BooleanField(
         default=False,
         help_text="Defines or will have access to special "
