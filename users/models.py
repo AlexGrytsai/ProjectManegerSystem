@@ -22,6 +22,9 @@ class Role(models.TextChoices):
 
 
 class WorkerUser(AbstractUser):
+    class Meta:
+        ordering = ["username"]
+
     role = models.CharField(
         max_length=64, choices=Role.choices, default=Role.GUEST
     )
