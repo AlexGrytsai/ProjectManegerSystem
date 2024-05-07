@@ -15,12 +15,15 @@
           <h1 class="display-2 text-white">
             CoWorkers list
           </h1>
+          {% if object.id == request.user.id or request.user.role == "Supervisor" %}
+            <a href="{% url 'users:add-worker' %}" class="btn btn-success">Add new worker</a>
+          {% endif %}
         </div>
       </div>
     </div>
   </div>
   <!-- Page content -->
-  <div class="container-fluid mt--8">
+  <div class="container-fluid mt--7">
   <div class="row">
     <div class="col-xl-12 order-xl-1">
       <div class="card">
@@ -39,6 +42,7 @@
                       {% if request.user.role == "Supervisor" %}
                         <th>Role</th>
                         <th>Active account</th>
+                        <th>Edite</th>
                       {% endif %}
                     </tr>
                     {% for worker in worker_list %}
@@ -68,6 +72,7 @@
                             <span style="color: red;">&#10060;</span>
                           {% endif %}
                         </td>
+                        <td><a href="{% url 'users:worker-update' pk=worker.id %}" class="btn btn-outline-success">Edit profile</a></td>
                       {% endif %}
                     {% endfor %}
                     </tr>
