@@ -1,6 +1,6 @@
 {% extends 'layouts/base.html' %}
 
-{% block title %} Coworkers list {% endblock title %}
+{% block title %}My CoWorkers{% endblock title %}
 
 {% block content %}
 
@@ -13,10 +13,12 @@
       <div class="row" style="white-space: nowrap">
         <div class="col-lg-7 col-md-10">
           <h1 class="display-2 text-white">
-            CoWorkers list
+            My CoWorkers
           </h1>
           {% if object.id == request.user.id or request.user.role == "Supervisor" %}
-            <a href="{% url 'users:add-worker' %}" class="btn btn-success">Add new worker</a>
+            <a href="{% url 'users:add-worker' %}" class="btn btn-success">
+              Add new Worker
+            </a>
           {% endif %}
         </div>
       </div>
@@ -32,6 +34,9 @@
             <div class="pl-lg-4">
               <div class="row">
                 {% if worker_list %}
+                  <div class="text-left">
+                    <strong>Total workers:</strong> {{ total_workers }}
+                  </div>
                   <table class="table table-striped">
                     <tr class="text-center">
                       <th>ID</th>
@@ -72,7 +77,10 @@
                             <span style="color: red;">&#10060;</span>
                           {% endif %}
                         </td>
-                        <td><a href="{% url 'users:worker-update' pk=worker.id %}" class="btn btn-outline-success">Edit profile</a></td>
+                        <td><a
+                            href="{% url 'users:worker-update' pk=worker.id %}"
+                            class="btn btn-outline-success">Edit profile</a>
+                        </td>
                       {% endif %}
                     {% endfor %}
                     </tr>

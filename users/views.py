@@ -121,3 +121,8 @@ class WorkerListView(LoginRequiredMixin, ListView):
     template_name = "users/worker_list.html"
     context_object_name = "worker_list"
     paginate_by = 10
+
+    def get_context_data(self, **kwargs):
+        context = super(WorkerListView, self).get_context_data(**kwargs)
+        context["total_workers"] = WorkerUser.objects.all().count()
+        return context
