@@ -32,7 +32,7 @@
                 {% endif %}
               </strong>
             </h2>
-            <form action="" method="post" novalidate>
+            <form action="" method="post" novalidate enctype="multipart/form-data" novalidate>
               {% csrf_token %}
               {{ form|crispy }}
               {{ change_password|safe }}
