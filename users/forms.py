@@ -48,3 +48,12 @@ class WorkerUserUpdateForm(forms.ModelForm):
             self.fields.pop("position")
             self.fields.pop("role")
             self.fields.pop("is_active")
+
+
+class WorkerSearchForm(forms.Form):
+    title = forms.CharField(
+        label="",
+        max_length=150,
+        required=False,
+        widget=forms.TextInput(attrs={"placeholder": "Search CoWorkers"}),
+    )
