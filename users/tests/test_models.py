@@ -2,7 +2,6 @@ from unittest.mock import MagicMock
 
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
-from django.core.files.uploadedfile import SimpleUploadedFile
 from django.db.models.fields.files import ImageFieldFile
 from django.test import TestCase
 
@@ -70,12 +69,7 @@ class WorkerUserModelTest(TestCase):
         )
 
     def test_clean_method_invalid_photo(self):
-        invalid_photo = SimpleUploadedFile(
-            "invalid_photo.txt",
-            b"invalid_image_content",
-            content_type="text/plain"
-        )
-        self.user.photo = invalid_photo
+        self.mock_photo.size = 5024
 
         with self.assertRaises(ValidationError):
             self.user.clean()
