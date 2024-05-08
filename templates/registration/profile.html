@@ -19,7 +19,8 @@
             {{ display_position }}
           </p>
           {% if object.id == request.user.id or request.user.role == "Supervisor" %}
-            <a href="{% url 'users:worker-update' pk=workeruser.id %}" class="btn btn-neutral">Edit profile</a>
+            <a href="{% url 'users:worker-update' pk=workeruser.id %}"
+               class="btn btn-neutral">Edit profile</a>
           {% endif %}
         </div>
       </div>
@@ -33,9 +34,9 @@
           <div class="row justify-content-center">
             <div class="col-lg-3 order-lg-2">
               <div class="card-profile-image">
-                {% if request.user.photo %}
+                {% if object.photo %}
                   <img alt="Image placeholder"
-                       src="{{ request.user.photo.url }}"
+                       src="{{ object.photo.url }}"
                        class="rounded-circle">
                 {% else %}
                   <img alt="Image placeholder"
@@ -189,6 +190,10 @@
               <div class="pl-lg-4">
                 <div class="container">
                   <h1 style="color: red">NEED TO BE IMPLEMENTED</h1>
+                  {% if object.photo %}
+                    <h1 style="color: red">{{ object.photo.url }}</h1>
+                    <img alt="Image placeholder" src="{{ object.photo. }}">
+                  {% endif %}
                 </div>
               </div>
             </form>
