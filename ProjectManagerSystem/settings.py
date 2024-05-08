@@ -176,9 +176,9 @@ STATICFILES_DIRS = [
 ]
 
 # AWS S3
-USE_S3 = False
+AWS_S3 = False
 
-if USE_S3:
+if AWS_S3:
     AWS_ACCESS_KEY_ID = aws_s3.access_key
     AWS_SECRET_ACCESS_KEY = aws_s3.secret_key
     AWS_STORAGE_BUCKET_NAME = aws_s3.bucket_name
