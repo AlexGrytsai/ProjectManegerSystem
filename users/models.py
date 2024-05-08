@@ -98,6 +98,8 @@ class WorkerUser(AbstractUser):
                 )
 
     def __str__(self):
+        if self.first_name and self.last_name:
+            return f"{self.first_name} {self.last_name} ({self.username})"
         return f"{self.username}"
 
     def get_absolute_url(self):

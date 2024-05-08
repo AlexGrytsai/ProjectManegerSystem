@@ -19,7 +19,7 @@
             {{ display_position }}
           </p>
           {% if object.id == request.user.id or request.user.role == "Supervisor" %}
-            <a href="{% url 'users:worker-update' pk=workeruser.id %}"
+            <a href="{% url 'users:worker-update' pk=workeruser.id %}?next={{ request.path }}"
                class="btn btn-neutral">Edit profile</a>
           {% endif %}
         </div>

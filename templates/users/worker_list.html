@@ -93,7 +93,7 @@
                           {% endif %}
                         </td>
                         <td><a
-                            href="{% url 'users:worker-update' pk=worker.id %}"
+                            href="{% url 'users:worker-update' pk=worker.id %}?next={{ request.path }}"
                             class="btn btn-outline-success">Edit profile</a>
                         </td>
                       {% endif %}
