@@ -1,6 +1,5 @@
+from django.db.models.signals import post_migrate
 from django.db.models.signals import post_save
-from django.db.models.signals import pre_migrate
-from django.db.models.signals import pre_save
 from django.dispatch import receiver
 
 
@@ -95,7 +94,7 @@ def create_and_add_permissions_to_groups(group: "Group", **kwargs) -> None:
                 group.permissions.add(new_permission)
 
 
-@receiver(pre_migrate)
+@receiver(post_migrate)
 def create_groups_and_permissions(sender, **kwargs) -> None:
     from django.contrib.auth.models import Group
     from .models import Role
@@ -140,7 +139,7 @@ def update_user_in_group(sender, instance, **kwargs) -> None:
         instance.groups.add(new_group)
 
 
-@receiver(pre_save, sender="users.WorkerUser")
+@receiver(post_save, sender="users.WorkerUser")
 def delete_old_photo(sender, instance, **kwargs):
     from django.core.files.storage import default_storage
     if instance.pk:
