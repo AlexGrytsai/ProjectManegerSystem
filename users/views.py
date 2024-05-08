@@ -6,8 +6,10 @@ from django.views.generic import DetailView
 from django.views.generic import ListView
 from django.views.generic import TemplateView
 from django.views.generic import UpdateView
+from django.db.models import Q
 
 from .forms import AddWorkerForm
+from .forms import WorkerSearchForm
 from .forms import RegisterForm
 from .forms import WorkerUserUpdateForm
 from .models import WorkerUser
@@ -122,7 +124,22 @@ class WorkerListView(LoginRequiredMixin, ListView):
     context_object_name = "worker_list"
     paginate_by = 10
 
-    def get_context_data(self, **kwargs):
+    def get_context_data(self, *, object_list=None, **kwargs):
         context = super(WorkerListView, self).get_context_data(**kwargs)
         context["total_workers"] = WorkerUser.objects.all().count()
+        title = self.request.GET.get("title", "")
+        context["search_form"] = WorkerSearchForm(initial={"title": title})
+
         return context
+
+    def get_queryset(self):
+        queryset = WorkerUser.objects.all()
+        form = WorkerSearchForm(self.request.GET)
+        if form.is_valid():
+            search_term = form.cleaned_data["title"]
+            search_conditions = (Q(username__icontains=search_term) |
+                                 Q(first_name__icontains=search_term) |
+                                 Q(last_name__icontains=search_term))
+            return queryset.filter(search_conditions)
+
+        return queryset
