@@ -24,4 +24,5 @@ urlpatterns = [
     path("__debug__/", include("debug_toolbar.urls")),
     path("social-auth/", include("social_django.urls", namespace="social")),
     path("", include("users.urls", namespace="users")),
+    path("", include("projects.urls", namespace="projects")),
 ]
