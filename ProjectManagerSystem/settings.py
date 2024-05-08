@@ -86,27 +86,31 @@ WSGI_APPLICATION = "ProjectManagerSystem.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 #
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+
+AWS_RDS = False
+
+if AWS_RDS:
+    # Postgres
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql_psycopg2",
+            "NAME": aws_postgres.db_name,
+            "USER": aws_postgres.master_username,
+            "PASSWORD": aws_postgres.password,
+            "HOST": aws_postgres.endpoint,
+            "PORT": aws_postgres.port,
+        }
     }
-}
 
-## Postgres
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.postgresql_psycopg2",
-#         "NAME": aws_postgres.db_name,
-#         "USER": aws_postgres.master_username,
-#         "PASSWORD": aws_postgres.password,
-#         "HOST": aws_postgres.endpoint,
-#         "PORT": aws_postgres.port,
-#     }
-# }
-
-# For Django Social Auth (need use with Postgres)
-# SOCIAL_AUTH_JSONFIELD_ENABLED = True
+    # For Django Social Auth(need use with Postgres)
+    SOCIAL_AUTH_JSONFIELD_ENABLED = True
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
+    }
 
 # Password management in Django
 # https://docs.djangoproject.com/en/5.0/topics/auth/passwords/
@@ -171,7 +175,7 @@ STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
 
-#AWS S3
+# AWS S3
 USE_S3 = False
 
 if USE_S3:
