@@ -1,5 +1,6 @@
-from django.db.models.signals import pre_migrate
 from django.db.models.signals import post_save
+from django.db.models.signals import pre_migrate
+from django.db.models.signals import pre_save
 from django.dispatch import receiver
 
 
@@ -137,3 +138,16 @@ def update_user_in_group(sender, instance, **kwargs) -> None:
             instance.groups.add(new_group)
     else:
         instance.groups.add(new_group)
+
+
+@receiver(pre_save, sender="users.WorkerUser")
+def delete_old_photo(sender, instance, **kwargs):
+    from django.core.files.storage import default_storage
+    if instance.pk:
+        try:
+            old_instance = sender.objects.get(pk=instance.pk)
+            if old_instance.photo and old_instance.photo != instance.photo:
+                path_to_old_photo = old_instance.photo.path
+                default_storage.delete(path_to_old_photo)
+        except sender.DoesNotExist:
+            pass
