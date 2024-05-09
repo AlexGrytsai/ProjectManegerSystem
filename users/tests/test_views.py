@@ -27,16 +27,12 @@ class PublicViewsTest(TestCase):
     def test_access_to_login_page(self):
         response = self.client.get(reverse("users:login"))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(
-            response, "registration/login.html"
-        )
+        self.assertTemplateUsed(response, "registration/login.html")
 
     def test_access_to_register_page(self):
         response = self.client.get(reverse("users:register-user"))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(
-            response, "registration/register_form.html"
-        )
+        self.assertTemplateUsed(response, "registration/register_form.html")
 
 
 class WorkerLoggedInViewsTest(TestCase):
@@ -72,9 +68,7 @@ class WorkerLoggedInViewsTest(TestCase):
         response = self.client.get(reverse("users:add-worker"))
 
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(
-            response, "users/worker_form.html"
-        )
+        self.assertTemplateUsed(response, "users/worker_form.html")
 
     def test_invalidate_add_new_worker(self):
         self.worker.role = "Guest"
@@ -86,29 +80,22 @@ class WorkerLoggedInViewsTest(TestCase):
 
     def test_validate_update_worker(self):
         response = self.client.get(
-            reverse(
-                "users:worker-update", kwargs={"pk": self.worker2.id}
-            )
+            reverse("users:worker-update", kwargs={"pk": self.worker2.id})
         )
 
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(
-            response, "users/worker_form.html"
-        )
+        self.assertTemplateUsed(response, "users/worker_form.html")
 
         self.client.force_login(self.worker2)
 
         response = self.client.get(
-            reverse(
-                "users:worker-update", kwargs={"pk": self.worker.id})
+            reverse("users:worker-update", kwargs={"pk": self.worker.id})
         )
 
         self.assertEqual(response.status_code, 403)
 
         response = self.client.get(
-            reverse(
-                "users:worker-update", kwargs={"pk": self.worker2.id}
-            )
+            reverse("users:worker-update", kwargs={"pk": self.worker2.id})
         )
 
         self.assertEqual(response.status_code, 200)
@@ -116,9 +103,7 @@ class WorkerLoggedInViewsTest(TestCase):
     def test_invalidate_update_worker(self):
         self.client.force_login(self.worker2)
         response = self.client.get(
-            reverse(
-                "users:worker-update", kwargs={"pk": self.worker.id}
-            )
+            reverse("users:worker-update", kwargs={"pk": self.worker.id})
         )
 
         self.assertEqual(response.status_code, 403)
