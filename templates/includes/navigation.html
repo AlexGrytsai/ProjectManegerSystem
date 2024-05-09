@@ -10,7 +10,8 @@
               <li class="breadcrumb-item"><a href="/"><i
                   class="fas fa-home"></i></a></li>
               <li class="breadcrumb-item"><a href="#">Dashboards</a></li>
-              <li class="breadcrumb-item active" aria-current="page">{{ current_page_name }}
+              <li class="breadcrumb-item active"
+                  aria-current="page">{{ current_page_name }}
               </li>
             </ol>
           </nav>
@@ -95,8 +96,14 @@
              data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <div class="media align-items-center">
               <span class="avatar avatar-sm rounded-circle">
-                <img alt="Image placeholder"
-                     src="/static/img/default-user-avatar.png">
+                {% if request.user.photo %}
+                  <img alt="Image placeholder"
+                       src="{{ request.user.photo.url }}"
+                       class="rounded-circle">
+                {% else %}
+                  <img alt="Image placeholder"
+                       src="/static/img/default-user-avatar.png">
+                {% endif %}
               </span>
               <div class="media-body  ml-2  d-none d-lg-block">
                 <span class="mb-0 text-sm  font-weight-bold">
