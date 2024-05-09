@@ -1,13 +1,15 @@
 from django.urls import include
 from django.urls import path
 
-from .views import (IndexView,
-                    AddWorkerView,
-                    ProfileView,
-                    RegisterView,
-                    WorkerDetailView,
-                    WorkerUpdateView,
-                    WorkerListView, )
+from .views import (
+    IndexView,
+    AddWorkerView,
+    ProfileView,
+    RegisterView,
+    WorkerDetailView,
+    WorkerUpdateView,
+    WorkerListView,
+)
 
 urlpatterns = [
     path("accounts/", include("django.contrib.auth.urls")),
@@ -16,20 +18,14 @@ urlpatterns = [
     path("register/", RegisterView.as_view(), name="register-user"),
     path("addworker/", AddWorkerView.as_view(), name="add-worker"),
     path(
-        "accounts/profile/<int:pk>/",
-        WorkerDetailView.as_view(),
-        name="worker-detail"
+        "accounts/profile/<int:pk>/", WorkerDetailView.as_view(), name="worker-detail"
     ),
     path(
         "accounts/profile/<int:pk>/update/",
         WorkerUpdateView.as_view(),
-        name="worker-update"
+        name="worker-update",
     ),
-    path(
-        "accounts/workers/",
-        WorkerListView.as_view(),
-        name="worker-list"
-    ),
+    path("accounts/workers/", WorkerListView.as_view(), name="worker-list"),
 ]
 
 app_name = "users"

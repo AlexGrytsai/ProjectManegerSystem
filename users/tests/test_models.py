@@ -26,25 +26,26 @@ class WorkerUserModelTest(TestCase):
         self.assertEqual(str(self.user), f"{self.user.username}")
 
     def test_get_absolute_url(self):
-        self.assertEqual(self.user.get_absolute_url(),
-                         f"/accounts/profile/{self.user.pk}/")
+        self.assertEqual(
+            self.user.get_absolute_url(), f"/accounts/profile/{self.user.pk}/"
+        )
 
     def test_clean_method_valid_phone_number(self):
-        self.user.phone_number = '+3456789123'
+        self.user.phone_number = "+3456789123"
         self.user.clean()
 
     def test_clean_method_invalid_phone_number(self):
-        self.user.phone_number = '123456'
+        self.user.phone_number = "123456"
         with self.assertRaises(ValidationError):
             self.user.clean()
 
     def test_clean_method_valid_telegram(self):
         self.user.phone_number = None
-        self.user.telegram = '@test'
+        self.user.telegram = "@test"
         self.user.clean()
 
     def test_clean_method_invalid_telegram(self):
-        self.user.telegram = 'test'
+        self.user.telegram = "test"
         with self.assertRaises(ValidationError):
             self.user.clean()
 
@@ -64,8 +65,7 @@ class WorkerUserModelTest(TestCase):
 
         max_photo_size = 2097152  # 2 MB
         self.assertLessEqual(
-            self.user.photo.size, max_photo_size,
-            "Photo size should be within limits"
+            self.user.photo.size, max_photo_size, "Photo size should be within limits"
         )
 
     def test_clean_method_invalid_photo(self):

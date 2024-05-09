@@ -54,12 +54,11 @@ class WorkerUser(AbstractUser):
     )
 
     is_active = models.BooleanField(
-                                    default=False,
-                                    help_text=(
-                                        "Designates whether this user "
-                                        "should be treated as active. "
-                                    ),
-                                    )
+        default=False,
+        help_text=(
+            "Designates whether this user " "should be treated as active. "
+        ),
+    )
 
     is_supervisor = models.BooleanField(
         default=False,
@@ -70,11 +69,12 @@ class WorkerUser(AbstractUser):
     def clean(self):
         super().clean()
         if self.phone_number:
-            if not self.phone_number.startswith('+3'):
+            if not self.phone_number.startswith("+3"):
                 raise ValidationError("Phone number should start with '+3'.")
             if not self.phone_number[1:].isdigit():
                 raise ValidationError(
-                    "Phone number should contain only digits after '+3'.")
+                    "Phone number should contain only digits after '+3'."
+                )
             if len(self.phone_number) < 5:
                 raise ValidationError("Phone number is too short.")
             if len(self.phone_number) > 16:

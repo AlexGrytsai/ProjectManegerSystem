@@ -64,8 +64,10 @@ class WorkerDetailView(LoginRequiredMixin, DetailView):
         else:
             context["display_position"] = self.request.user.position
             if self.request.user.first_name and self.request.user.last_name:
-                context["display_name"] = (f"{self.request.user.first_name} "
-                                           f"{self.request.user.last_name}")
+                context["display_name"] = (
+                    f"{self.request.user.first_name} " 
+                    f"{self.request.user.last_name}"
+                )
             else:
                 context["display_name"] = self.request.user.username
 
@@ -79,8 +81,8 @@ class WorkerUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
     def test_func(self):
         return (
-                self.get_object().id == self.request.user.id or
-                self.request.user.role == "Supervisor"
+            self.get_object().id == self.request.user.id
+            or self.request.user.role == "Supervisor"
         )
 
     def get_form_kwargs(self):
@@ -123,9 +125,11 @@ class WorkerListView(LoginRequiredMixin, ListView):
         form = WorkerSearchForm(self.request.GET)
         if form.is_valid():
             search_term = form.cleaned_data["title"]
-            search_conditions = (Q(username__icontains=search_term) |
-                                 Q(first_name__icontains=search_term) |
-                                 Q(last_name__icontains=search_term))
+            search_conditions = (
+                Q(username__icontains=search_term)
+                | Q(first_name__icontains=search_term)
+                | Q(last_name__icontains=search_term)
+            )
             return queryset.filter(search_conditions)
 
         return queryset

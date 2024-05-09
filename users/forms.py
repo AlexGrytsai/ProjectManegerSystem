@@ -18,27 +18,29 @@ class RegisterForm(UserCreationForm):
 class AddWorkerForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = WorkerUser
-        fields = UserCreationForm.Meta.fields + ("role",
-                                                 "position",
-                                                 "is_active",
-                                                 )
+        fields = UserCreationForm.Meta.fields + (
+            "role",
+            "position",
+            "is_active",
+        )
 
 
 class WorkerUserUpdateForm(forms.ModelForm):
     class Meta(UserCreationForm.Meta):
         model = WorkerUser
 
-        fields = ("username",
-                  "email",
-                  "first_name",
-                  "last_name",
-                  "role",
-                  "position",
-                  "is_active",
-                  "phone_number",
-                  "telegram",
-                  "photo",
-                  )
+        fields = (
+            "username",
+            "email",
+            "first_name",
+            "last_name",
+            "role",
+            "position",
+            "is_active",
+            "phone_number",
+            "telegram",
+            "photo",
+        )
 
     def __init__(self, *args, **kwargs):
         user_role = kwargs.pop("user_role")

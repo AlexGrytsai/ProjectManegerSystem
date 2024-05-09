@@ -16,7 +16,8 @@ class WorkerUserAdmin(UserAdmin):
     )
 
     details_info = (
-        "Details info", {
+        "Details info",
+        {
             "fields": (
                 "position",
                 "role",
@@ -24,11 +25,12 @@ class WorkerUserAdmin(UserAdmin):
                 "telegram",
                 "photo",
             )
-        }
+        },
     )
 
     permissions = (
-        "Permissions", {
+        "Permissions",
+        {
             "fields": (
                 "is_active",
                 "is_staff",
@@ -36,7 +38,7 @@ class WorkerUserAdmin(UserAdmin):
                 "is_superuser",
                 "user_permissions",
             )
-        }
+        },
     )
 
     fieldsets = (
@@ -49,7 +51,8 @@ class WorkerUserAdmin(UserAdmin):
 
     add_fieldsets = UserAdmin.add_fieldsets + (
         (
-            "Additional info", {
+            "Additional info",
+            {
                 "fields": (
                     "position",
                     "role",
@@ -58,7 +61,7 @@ class WorkerUserAdmin(UserAdmin):
                     "telegram",
                     "photo",
                 )
-            }
+            },
         ),
     )
 
