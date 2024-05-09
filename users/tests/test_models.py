@@ -11,13 +11,13 @@ class WorkerUserModelTest(TestCase):
         self.mock_photo = MagicMock(spec=ImageFieldFile)
         self.mock_photo.size = 1024
         self.user = get_user_model().objects.create_user(
-            username='test_user',
-            email='test@example.com',
-            password='password123',
-            role='Supervisor',
-            position='Developer',
-            phone_number='+1234567890',
-            telegram='@test_user',
+            username="test_user",
+            email="test@example.com",
+            password="password123",
+            role="Supervisor",
+            position="Developer",
+            phone_number="+1234567890",
+            telegram="@test_user",
             is_active=True,
             is_supervisor=True,
         )
