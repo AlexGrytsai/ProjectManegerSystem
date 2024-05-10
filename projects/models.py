@@ -86,17 +86,28 @@ class Project(models.Model):
         default=ProjectStatus.DEVELOPING
     )
     deadline = models.DateField(null=True, blank=True)
-    created = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    project_lead = models.ForeignKey(WorkerUser, on_delete=models.CASCADE)
-    responsible_workers = models.ManyToManyField(
-        settings.AUTH_USER_MODEL, related_name="projects"
+    project_lead = models.ForeignKey(
+        WorkerUser,
+        on_delete=models.CASCADE,
+        limit_choices_to={"role": "Supervisor"},
+        null=True,
+        blank=True
     )
-    tasks = models.ManyToManyField(Task, related_name="projects")
+    responsible_workers = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        related_name="projects",
+        blank=True,
+        null=True
+    )
+    tasks = models.ManyToManyField(
+        Task, related_name="projects", blank=True, null=True
+    )
 
     class Meta:
-        ordering = ["-created"]
+        ordering = ["-created_at"]
         verbose_name = "project"
 
     def __str__(self):
-        return f"{self.name} by {self.author}"
+        return f"{self.name} by {self.project_lead}"
