@@ -7,6 +7,7 @@ from django.views.generic import DetailView
 from django.views.generic import ListView
 from django.views.generic import TemplateView
 from django.views.generic import UpdateView
+from view_breadcrumbs import BaseBreadcrumbMixin
 
 from .forms import AddWorkerForm
 from .forms import RegisterForm
@@ -15,12 +16,9 @@ from .forms import WorkerUserUpdateForm
 from .models import WorkerUser
 
 
-class IndexView(LoginRequiredMixin, TemplateView):
+class IndexView(LoginRequiredMixin, BaseBreadcrumbMixin, TemplateView):
     template_name = "index.html"
-
-
-class ProfileView(LoginRequiredMixin, TemplateView):
-    template_name = "registration/profile.html"
+    crumbs = [("", "Home"), ]
 
 
 class RegisterView(CreateView):
@@ -31,11 +29,21 @@ class RegisterView(CreateView):
     success_url = reverse_lazy("users:login")
 
 
-class AddWorkerView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
+class AddWorkerView(
+    LoginRequiredMixin,
+    UserPassesTestMixin,
+    BaseBreadcrumbMixin,
+    CreateView
+):
     model = WorkerUser
     form_class = AddWorkerForm
     success_url = reverse_lazy("users:worker-list")
     template_name = "users/worker_form.html"
+    crumbs = [
+        ("", "Home"),
+        ("My CoWorkers", reverse_lazy("users:worker-list")),
+        ("Add new Worker", "")
+    ]
 
     def test_func(self):
         return self.request.user.role == "Supervisor"
@@ -47,9 +55,14 @@ class AddWorkerView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         return context
 
 
-class WorkerDetailView(LoginRequiredMixin, DetailView):
+class WorkerDetailView(LoginRequiredMixin, BaseBreadcrumbMixin, DetailView):
     model = WorkerUser
     template_name = "registration/profile.html"
+    crumbs = [
+        ("", "Home"),
+        ("My CoWorkers", reverse_lazy("users:worker-list")),
+        ("Profile", "")
+    ]
 
     def get_context_data(self, **kwargs):
         context = super(WorkerDetailView, self).get_context_data(**kwargs)
@@ -65,7 +78,7 @@ class WorkerDetailView(LoginRequiredMixin, DetailView):
             context["display_position"] = self.request.user.position
             if self.request.user.first_name and self.request.user.last_name:
                 context["display_name"] = (
-                    f"{self.request.user.first_name} " 
+                    f"{self.request.user.first_name} "
                     f"{self.request.user.last_name}"
                 )
             else:
@@ -74,15 +87,27 @@ class WorkerDetailView(LoginRequiredMixin, DetailView):
         return context
 
 
-class WorkerUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+class WorkerUpdateView(
+    LoginRequiredMixin,
+    UserPassesTestMixin,
+    BaseBreadcrumbMixin,
+    UpdateView
+):
     model = WorkerUser
     form_class = WorkerUserUpdateForm
     template_name = "users/worker_form.html"
 
+    crumbs = [
+        ("", "Home"),
+        ("My CoWorkers", reverse_lazy("users:worker-list")),
+        ("Profile", ""),
+        ("Edit", "")
+    ]
+
     def test_func(self):
         return (
-            self.get_object().id == self.request.user.id
-            or self.request.user.role == "Supervisor"
+                self.get_object().id == self.request.user.id
+                or self.request.user.role == "Supervisor"
         )
 
     def get_form_kwargs(self):
@@ -93,7 +118,9 @@ class WorkerUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super(WorkerUpdateView, self).get_context_data(**kwargs)
-        user = self.get_object()
+        next_url = self.request.GET.get("next")
+        if next_url:
+            context["referer"] = next_url
         context["is_update"] = True
         return context
 
@@ -106,11 +133,13 @@ class WorkerUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         )
 
 
-class WorkerListView(LoginRequiredMixin, ListView):
+class WorkerListView(LoginRequiredMixin, BaseBreadcrumbMixin, ListView):
     model = WorkerUser
     template_name = "users/worker_list.html"
     context_object_name = "worker_list"
     paginate_by = 10
+
+    crumbs = [("", "Home"), ("My CoWorkers", ""),]
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(WorkerListView, self).get_context_data(**kwargs)
@@ -126,9 +155,9 @@ class WorkerListView(LoginRequiredMixin, ListView):
         if form.is_valid():
             search_term = form.cleaned_data["title"]
             search_conditions = (
-                Q(username__icontains=search_term)
-                | Q(first_name__icontains=search_term)
-                | Q(last_name__icontains=search_term)
+                    Q(username__icontains=search_term)
+                    | Q(first_name__icontains=search_term)
+                    | Q(last_name__icontains=search_term)
             )
             return queryset.filter(search_conditions)
 
