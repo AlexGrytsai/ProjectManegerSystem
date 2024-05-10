@@ -4,7 +4,6 @@ from django.urls import path
 from .views import (
     IndexView,
     AddWorkerView,
-    ProfileView,
     RegisterView,
     WorkerDetailView,
     WorkerUpdateView,
@@ -14,11 +13,12 @@ from .views import (
 urlpatterns = [
     path("accounts/", include("django.contrib.auth.urls")),
     path("", IndexView.as_view(), name="index"),
-    path("accounts/profile/", ProfileView.as_view(), name="profile"),
     path("register/", RegisterView.as_view(), name="register-user"),
     path("addworker/", AddWorkerView.as_view(), name="add-worker"),
     path(
-        "accounts/profile/<int:pk>/", WorkerDetailView.as_view(), name="worker-detail"
+        "accounts/profile/<int:pk>/",
+        WorkerDetailView.as_view(),
+        name="worker-detail"
     ),
     path(
         "accounts/profile/<int:pk>/update/",
