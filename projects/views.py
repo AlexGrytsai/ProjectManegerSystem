@@ -50,11 +50,24 @@ class ProjectListView(LoginRequiredMixin, BaseBreadcrumbMixin, ListView):
     model = Project
     template_name = "projects/project_list.html"
     context_object_name = "project_list"
+    queryset = Project.objects.prefetch_related("responsible_workers", "tasks")
     paginate_by = 10
+
     crumbs = [("", "Home"), ("Projects", "")]
 
     def get_context_data(self, **kwargs):
         context = super(ProjectListView, self).get_context_data(**kwargs)
         total_projects = Project.objects.all().count()
         context["total_workers"] = total_projects
+
+        for project in context["project_list"]:
+            project.tasks_in_progress_count = project.tasks.exclude(
+                status="Done"
+            ).count
+            project.tasks_done_count = project.tasks.filter(
+                status="Done"
+            ).count
+            project.responsible_workers_count = (
+                project.responsible_workers.count()
+            )
         return context
