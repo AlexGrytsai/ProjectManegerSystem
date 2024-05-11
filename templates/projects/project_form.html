@@ -12,7 +12,11 @@
         <div class="card-body">
           <h2 class="text-muted mb-4">
             <strong>
-              Create a new project
+              {% if is_update %}
+                Update the project
+              {% else %}
+                Create a new project
+              {% endif %}
             </strong>
           </h2>
           <form action="" method="post" novalidate

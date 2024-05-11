@@ -3,6 +3,7 @@ from django.urls import path
 
 from .views import ProjectCreateView
 from .views import ProjectListView
+from .views import ProjectUpdateView
 from users.views import WorkerListView
 
 urlpatterns = [
@@ -14,6 +15,11 @@ urlpatterns = [
         "projects/<int:project_id>/workers/",
         WorkerListView.as_view(),
         name="project-workers"
+    ),
+    path(
+        "projects/<int:pk>/update/",
+        ProjectUpdateView.as_view(),
+        name="update-project"
     ),
 ]
 
