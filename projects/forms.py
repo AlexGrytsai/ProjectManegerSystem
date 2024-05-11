@@ -10,7 +10,32 @@ class ProjectCreateForm(forms.ModelForm):
         widget=forms.widgets.DateInput(attrs={"type": "date"}),
         required=False
     )
+    conditions = Q(is_active=True) & Q(role="Engineer/Manager")
+    project_lead = forms.ModelChoiceField(
+        queryset=WorkerUser.objects.filter(role="Supervisor")
+    )
+    responsible_workers = forms.ModelMultipleChoiceField(
+        queryset=WorkerUser.objects.filter(conditions).order_by("position"),
+        widget=forms.CheckboxSelectMultiple,
+        required=False
+    )
 
+    class Meta:
+        model = Project
+        fields = (
+            "name",
+            "description",
+            "deadline",
+            "project_lead",
+            "responsible_workers"
+        )
+
+
+class ProjectUpdateForm(forms.ModelForm):
+    deadline = forms.DateField(
+        widget=forms.widgets.DateInput(attrs={"type": "date"}),
+        required=False
+    )
     conditions = Q(is_active=True) & Q(role="Engineer/Manager")
     responsible_workers = forms.ModelMultipleChoiceField(
         queryset=WorkerUser.objects.filter(conditions).order_by("position"),
@@ -23,6 +48,7 @@ class ProjectCreateForm(forms.ModelForm):
         fields = (
             "name",
             "description",
+            "status",
             "deadline",
             "project_lead",
             "responsible_workers"

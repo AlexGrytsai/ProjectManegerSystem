@@ -91,7 +91,6 @@ class Project(models.Model):
     project_lead = models.ForeignKey(
         WorkerUser,
         on_delete=models.CASCADE,
-        limit_choices_to={"role": "Supervisor"},
         null=True,
         blank=True
     )
