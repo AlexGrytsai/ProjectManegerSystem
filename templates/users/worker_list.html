@@ -12,7 +12,11 @@
       <div class="row" style="white-space: nowrap">
         <div class="col-lg-7 col-md-10">
           <h1 class="display-2 text-white">
-            My CoWorkers
+            {% if project %}
+              Responsible workers in {{ project.name }}
+            {% else %}
+              My CoWorkers
+            {% endif %}
           </h1>
         </div>
       </div>
@@ -31,14 +35,21 @@
                   <div class="row">
                     <div class="col-lg-4 col-md-4 d-flex align-items-center">
                       <div class="text-left">
-                        <strong>Total workers:</strong> {{ total_workers }}
+                        <strong>Total workers:</strong>
+                        {% if project %}
+                          {{ project.responsible_workers.count }}
+                        {% else %}
+                          {{ total_workers }}
+                        {% endif %}
                       </div>
                     </div>
                     <div
                         class="col-lg-4 col-md-4 d-flex justify-content-center align-items-center">
-                      <div>
-                        {% include 'includes/search.html' %}
-                      </div>
+                      {% if not project %}
+                        <div>
+                          {% include 'includes/search.html' %}
+                        </div>
+                      {% endif %}
                     </div>
                     <div
                         class="col-lg-4 col-md-4 d-flex justify-content-end align-items-center">
@@ -67,11 +78,13 @@
                     </tr>
                     {% for worker in worker_list %}
                       <tr
-                          {% if worker.id == request.user.id %}class="text-center table-success"{% endif %}
+                          {% if worker.id == request.user.id %}
+                            class="text-center table-success"
+                          {% endif %}
                           {% if not worker.is_active %}
-                          class="text-center table-danger"
+                            class="text-center table-danger"
                           {% else %}
-                          class="text-center"
+                            class="text-center"
                           {% endif %}>
                       <td>{{ worker.id }}</td>
                       <td>

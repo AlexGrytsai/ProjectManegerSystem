@@ -1,6 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.db.models import Q
+from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
 from django.views.generic import DetailView
@@ -9,6 +10,7 @@ from django.views.generic import TemplateView
 from django.views.generic import UpdateView
 from view_breadcrumbs import BaseBreadcrumbMixin
 
+from projects.models import Project
 from .forms import AddWorkerForm
 from .forms import RegisterForm
 from .forms import WorkerSearchForm
@@ -139,11 +141,17 @@ class WorkerListView(LoginRequiredMixin, BaseBreadcrumbMixin, ListView):
     context_object_name = "worker_list"
     paginate_by = 10
 
-    crumbs = [("", "Home"), ("My CoWorkers", ""),]
+    crumbs = [("", "Home"), ("My CoWorkers", ""), ]
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(WorkerListView, self).get_context_data(**kwargs)
         context["total_workers"] = WorkerUser.objects.all().count()
+
+        project_id = self.kwargs.get("project_id")
+        if project_id:
+            project = get_object_or_404(Project, id=project_id)
+            context["project"] = project
+
         title = self.request.GET.get("title", "")
         context["search_form"] = WorkerSearchForm(initial={"title": title})
 
@@ -152,6 +160,13 @@ class WorkerListView(LoginRequiredMixin, BaseBreadcrumbMixin, ListView):
     def get_queryset(self):
         queryset = WorkerUser.objects.all()
         form = WorkerSearchForm(self.request.GET)
+        project_id = self.kwargs.get("project_id")
+
+        if project_id:
+            project = get_object_or_404(Project, id=project_id)
+            queryset = project.responsible_workers.all()
+            return queryset
+
         if form.is_valid():
             search_term = form.cleaned_data["title"]
             search_conditions = (
