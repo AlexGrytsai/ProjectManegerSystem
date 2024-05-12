@@ -1,14 +1,14 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.mixins import UserPassesTestMixin
-from django.db.models.functions import Concat
 from django.urls import reverse_lazy
 from view_breadcrumbs import BaseBreadcrumbMixin
 from django.views.generic import CreateView
 from django.views.generic import DetailView
 from django.views.generic import ListView
-from django.views.generic import TemplateView
+from django.views.generic import DeleteView
 from django.views.generic import UpdateView
-from django.db.models import Count, F, Value
+from django.db.models import Count
+from django.db.models import F
 from django.db.models import Q
 
 from .models import Project
@@ -61,7 +61,7 @@ class ProjectListView(LoginRequiredMixin, BaseBreadcrumbMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super(ProjectListView, self).get_context_data(**kwargs)
-        total_projects = Project.objects.all().count()
+        total_projects = Project.objects.count()
         context["total_workers"] = total_projects
 
         annotate_params = Project.objects.annotate(
@@ -103,3 +103,17 @@ class ProjectUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         if next_url:
             return next_url
         return reverse_lazy("projects:project-list")
+
+    def get_delete_url(self):
+        return reverse_lazy(
+            "projects:delete-project", kwargs={"pk": self.object.id}
+        )
+
+
+class ProjectDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Project
+    success_url = reverse_lazy("projects:project-list")
+    template_name = "projects/project_delete_confirm.html"
+
+    def test_func(self):
+        return self.request.user.role == "Supervisor"

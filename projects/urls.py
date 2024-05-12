@@ -1,10 +1,10 @@
-from django.urls import include
 from django.urls import path
 
+from users.views import WorkerListView
 from .views import ProjectCreateView
+from .views import ProjectDeleteView
 from .views import ProjectListView
 from .views import ProjectUpdateView
-from users.views import WorkerListView
 
 urlpatterns = [
     path("projects/create/",
@@ -20,6 +20,11 @@ urlpatterns = [
         "projects/<int:pk>/update/",
         ProjectUpdateView.as_view(),
         name="update-project"
+    ),
+    path(
+        "projects/<int:pk>/delete/",
+        ProjectDeleteView.as_view(),
+        name="delete-project"
     ),
 ]
 
