@@ -15,12 +15,12 @@
   <ul class="list-group list-group-flush">
     <li class="list-group-item">
       <b>Project lead:</b>
-      <a href="{% url 'users:worker-detail' pk=project.project_lead.id %}">
-        {% if project.project_lead.first_name %}
-          {{ project.project_lead.first_name }}
-          {{ project.project_lead.last_name }}
+      <a href="{% url 'users:worker-detail' pk=project.project_lead_id %}">
+        {% if project.project_lead_username %}
+          {{ project_lead_first_name }}
+          {{ project_lead_last_name }}
         {% else %}
-          {{ project.project_lead.username }}
+          {{ project.project_lead_username }}
         {% endif %}
       </a>
     </li>

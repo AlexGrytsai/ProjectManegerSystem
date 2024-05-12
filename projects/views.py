@@ -68,8 +68,13 @@ class ProjectListView(LoginRequiredMixin, BaseBreadcrumbMixin, ListView):
             tasks_in_progress_count=Count(
                 "tasks", filter=~Q(tasks__status="In Progress")
             ),
-            tasks_done_count=Count("tasks", filter=Q(tasks__status="Done")),
+            tasks_done_count=Count(
+                "tasks", filter=Q(tasks__status="Done")
+            ),
             responsible_workers_count=Count("responsible_workers"),
+            project_lead_username=F("project_lead__username"),
+            project_lead_first_name=F("project_lead__first_name"),
+            project_lead_last_name=F("project_lead__last_name"),
         )
 
         context["project_list"] = annotate_params
