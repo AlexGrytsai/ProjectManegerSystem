@@ -104,11 +104,6 @@ class ProjectUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
             return next_url
         return reverse_lazy("projects:project-list")
 
-    def get_delete_url(self):
-        return reverse_lazy(
-            "projects:delete-project", kwargs={"pk": self.object.id}
-        )
-
 
 class ProjectDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Project
@@ -117,3 +112,11 @@ class ProjectDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
     def test_func(self):
         return self.request.user.role == "Supervisor"
+
+
+class ProjectDetailView(LoginRequiredMixin, DetailView):
+    model = Project
+    template_name = "projects/project_detail.html"
+    queryset = Project.objects.select_related("project_lead").prefetch_related(
+        "responsible_workers", "tasks"
+    )

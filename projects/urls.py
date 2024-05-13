@@ -3,6 +3,7 @@ from django.urls import path
 from users.views import WorkerListView
 from .views import ProjectCreateView
 from .views import ProjectDeleteView
+from .views import ProjectDetailView
 from .views import ProjectListView
 from .views import ProjectUpdateView
 
@@ -25,6 +26,11 @@ urlpatterns = [
         "projects/<int:pk>/delete/",
         ProjectDeleteView.as_view(),
         name="delete-project"
+    ),
+    path(
+        "projects/<int:pk>/detail",
+        ProjectDetailView.as_view(),
+        name="project-detail"
     ),
 ]
 

@@ -1,0 +1,145 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}Project Detail{% endblock title %}
+
+{% block content %}
+  <div class="header pb-6 d-flex align-items-center"
+       style="min-height: 300px; background-size: cover; background-position: center top;">
+    <!-- Mask -->
+    <span class="mask bg-gradient-default opacity-8"></span>
+    <!-- Header container -->
+    <div class="container-fluid d-flex align-items-center">
+      <div class="row" style="white-space: nowrap">
+        <div class="col-lg-7 col-md-10">
+          <h1 class="display-2 text-white">
+            Project {{ project.name }}
+          </h1>
+          {% if request.user.role == "Supervisor" %}
+            <a href="{% url 'projects:update-project' pk=object.id %}?next={{ request.path }}"
+               class="btn btn-neutral">Edit project</a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Page content -->
+  <div class="container-fluid mt--7">
+    <div class="row justify-content-center">
+      <div class="col-xl-5 order-xl-1">
+        <div class="card mx-auto">
+          <div class="card-body">
+            <div class="pl-lg-4">
+              <div class="order-xl-5">
+                <div class="row mb-4">
+                  <ul class="nav nav-pills nav-fill">
+                    <li class="nav-item">
+                      <a class="nav-link active" aria-current="page"
+                         href="{% url 'projects:project-detail' pk=object.id %}">
+                        Overview
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="#">Tasks</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link disabled" aria-disabled="true">
+                        Files
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+                <h6 class="heading-small text-muted mb-4">Project
+                  information</h6>
+                <div class="pl-lg-4">
+                  <div class="row">
+                    <div class="col-lg-10">
+                      <div class="form-group">
+                        <label class="form-control-label">Project name</label>
+                        <a class="form-control">{{ object.name }}</a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-lg-5">
+                      <div class="form-group">
+                        <label class="form-control-label">Create date</label>
+                        <a class="form-control">{{ object.created_at|date:"M d, Y" }}</a>
+                      </div>
+                    </div>
+                    <div class="col-lg-5">
+                      <div class="form-group">
+                        <label class="form-control-label">Deadline</label>
+                        <a class="form-control">{{ object.deadline }}</a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-lg-10">
+                      <div class="form-group">
+                        <label class="form-control-label">Project
+                          lead</label>
+                        <a href="{% url 'users:worker-detail' pk=object.project_lead_id %}"
+                           class="form-control">
+                          {% if object.project_lead.first_name %}
+                            {{ object.project_lead.first_name }}
+                            {{ object.project_lead.first_name }} (
+                            {{ object.project_lead.position }})
+                          {% else %}
+                            {{ object.project_lead.username }} (
+                            {{ object.project_lead.position }})
+                          {% endif %}
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-lg-10">
+                      <div class="form-group">
+                        <label class="form-control-label">Description</label>
+                        <textarea class="form-control" rows="6"
+                                  disabled>{{ object.description }}
+                </textarea>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-lg-10">
+                      <div class="form-group">
+                        <label class="form-control-label">Responsible
+                          workers</label>
+                        {% if object.responsible_workers %}
+                          {% for worker in object.responsible_workers.all %}
+                            <a href="{% url 'users:worker-detail' pk=worker.id %}"
+                               class="form-control mt-2">
+                              {% if worker.first_name %}
+                                {{ worker.first_name }}
+                                {{ worker.first_name }}
+                                ({{ worker.position }})
+                              {% else %}
+                                {{ worker.username }} (
+                                {{ worker.position }})
+                              {% endif %}
+                            </a>
+                          {% endfor %}
+                        {% endif %}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <hr class="my-4"/>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {#    {% include "includes/footer.html" %}#}
+
+  </div>
+
+
+{% endblock content %}
+
+<!-- Specific JS goes HERE -->
+{% block javascripts %}{% endblock javascripts %}
