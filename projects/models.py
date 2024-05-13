@@ -91,12 +91,13 @@ class Project(models.Model):
     project_lead = models.ForeignKey(
         WorkerUser,
         on_delete=models.CASCADE,
+        related_name="lead_projects",
         null=True,
         blank=True
     )
     responsible_workers = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
-        related_name="projects",
+        related_name="worker_projects",
         blank=True,
         null=True
     )
