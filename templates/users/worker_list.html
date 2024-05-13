@@ -51,15 +51,17 @@
                         </div>
                       {% endif %}
                     </div>
-                    <div
-                        class="col-lg-4 col-md-4 d-flex justify-content-end align-items-center">
-                      {% if object.id == request.user.id or request.user.role == "Supervisor" %}
-                        <a href="{% url 'users:add-worker' %}"
-                           class="btn btn-success">
-                          Add new Worker
-                        </a>
-                      {% endif %}
-                    </div>
+                    {% if not project %}
+                      <div
+                          class="col-lg-4 col-md-4 d-flex justify-content-end align-items-center">
+                        {% if object.id == request.user.id or request.user.role == "Supervisor" %}
+                          <a href="{% url 'users:add-worker' %}"
+                             class="btn btn-success">
+                            Add new Worker
+                          </a>
+                        {% endif %}
+                      </div>
+                    {% endif %}
                   </div>
                 </div>
                 {% if worker_list %}
@@ -70,6 +72,7 @@
                       <th>First name</th>
                       <th>Last name</th>
                       <th>Position</th>
+                      <th>Num of projects</th>
                       {% if request.user.role == "Supervisor" %}
                         <th>Role</th>
                         <th>Active account</th>
@@ -96,6 +99,11 @@
                       <td>{{ worker.first_name }}</td>
                       <td>{{ worker.last_name }}</td>
                       <td>{{ worker.position }}</td>
+                      {% if worker.role == "Supervisor" %}
+                        <td>{{ worker.lead_project_count }}</td>
+                      {% else %}
+                        <td>{{ worker.worker_project_count }}</td>
+                      {% endif %}
                       {% if request.user.role == "Supervisor" %}
                         <td>{{ worker.role }}</td>
                         <td>
