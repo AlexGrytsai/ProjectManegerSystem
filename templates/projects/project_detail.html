@@ -39,7 +39,9 @@
                       </a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link" href="#">Tasks</a>
+                      <a class="nav-link" href="{% url 'projects:task-list' project.id%}">
+                        Tasks
+                      </a>
                     </li>
                     <li class="nav-item">
                       <a class="nav-link disabled" aria-disabled="true">
