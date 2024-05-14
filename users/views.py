@@ -1,6 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.mixins import UserPassesTestMixin
-from django.db.models import Q
+from django.db.models import Q, Count
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
@@ -60,6 +60,13 @@ class AddWorkerView(
 class WorkerDetailView(LoginRequiredMixin, BaseBreadcrumbMixin, DetailView):
     model = WorkerUser
     template_name = "registration/profile.html"
+    queryset = WorkerUser.objects.prefetch_related(
+        "workers_projects",
+        "workers_projects__project_lead",
+        "lead_projects",
+    )
+    context_object_name = "worker"
+
     crumbs = [
         ("", "Home"),
         ("My CoWorkers", reverse_lazy("users:worker-list")),
@@ -68,7 +75,10 @@ class WorkerDetailView(LoginRequiredMixin, BaseBreadcrumbMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(WorkerDetailView, self).get_context_data(**kwargs)
-        user = self.get_object()
+        user = self.object
+
+        context["worker_projects"] = user.workers_projects.all()
+        context["lead_projects"] = user.lead_projects.all()
 
         if user.id != self.request.user.id:
             context["display_position"] = user.position
@@ -145,12 +155,20 @@ class WorkerListView(LoginRequiredMixin, BaseBreadcrumbMixin, ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(WorkerListView, self).get_context_data(**kwargs)
-        context["total_workers"] = WorkerUser.objects.all().count()
+        context["total_workers"] = WorkerUser.objects.count()
 
         project_id = self.kwargs.get("project_id")
         if project_id:
             project = get_object_or_404(Project, id=project_id)
             context["project"] = project
+
+        queryset = self.get_queryset()
+        annotate_params = queryset.annotate(
+            worker_project_count=Count("workers_projects"),
+            lead_project_count=Count("lead_projects"),
+        ).order_by("username")
+
+        context["worker_list"] = annotate_params
 
         title = self.request.GET.get("title", "")
         context["search_form"] = WorkerSearchForm(initial={"title": title})

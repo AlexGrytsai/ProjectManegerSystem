@@ -59,12 +59,9 @@ class ProjectListView(LoginRequiredMixin, BaseBreadcrumbMixin, ListView):
 
     crumbs = [("", "Home"), ("Projects", "")]
 
-    def get_context_data(self, **kwargs):
-        context = super(ProjectListView, self).get_context_data(**kwargs)
-        total_projects = Project.objects.count()
-        context["total_workers"] = total_projects
-
-        annotate_params = Project.objects.annotate(
+    @staticmethod
+    def get_annotate_params():
+        return Project.objects.annotate(
             tasks_in_progress_count=Count(
                 "tasks", filter=~Q(tasks__status="In Progress")
             ),
@@ -76,6 +73,13 @@ class ProjectListView(LoginRequiredMixin, BaseBreadcrumbMixin, ListView):
             project_lead_first_name=F("project_lead__first_name"),
             project_lead_last_name=F("project_lead__last_name"),
         )
+
+    def get_context_data(self, **kwargs):
+        context = super(ProjectListView, self).get_context_data(**kwargs)
+        total_projects = Project.objects.count()
+        context["total_workers"] = total_projects
+
+        annotate_params = self.get_annotate_params()
 
         context["project_list"] = annotate_params
 
