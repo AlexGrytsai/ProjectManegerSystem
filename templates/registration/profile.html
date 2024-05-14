@@ -19,7 +19,7 @@
             {{ display_position }}
           </p>
           {% if object.id == request.user.id or request.user.role == "Supervisor" %}
-            <a href="{% url 'users:worker-update' pk=workeruser.id %}?next={{ request.path }}"
+            <a href="{% url 'users:worker-update' pk=worker.id %}?next={{ request.path }}"
                class="btn btn-neutral">Edit profile</a>
           {% endif %}
         </div>
@@ -106,103 +106,127 @@
       <div class="col-xl-8 order-xl-1">
         <div class="card">
           <div class="card-body">
-            <form>
-              <h6 class="heading-small text-muted mb-4">User information</h6>
-              <div class="pl-lg-4">
-                <div class="row">
-                  <div class="col-lg-6">
-                    <div class="form-group">
-                      <label class="form-control-label" for="input-username">Username</label>
-                      <input type="text" id="input-username"
-                             class="form-control" placeholder="Username"
-                             value="{{ object.username }}" disabled>
-                    </div>
-                  </div>
-                  <div class="col-lg-6">
-                    <div class="form-group">
-                      <label class="form-control-label" for="input-email">Email
-                        address</label>
-                      <input type="email" id="input-email" class="form-control"
-                             placeholder="Email" value="{{ object.email }}"
-                             disabled>
-                    </div>
+            <h6 class="heading-small text-muted mb-4">User information</h6>
+            <div class="pl-lg-4">
+              <div class="row">
+                <div class="col-lg-6">
+                  <div class="form-group">
+                    <label class="form-control-label" for="input-username">Username</label>
+                    <input type="text" id="input-username"
+                           class="form-control" placeholder="Username"
+                           value="{{ object.username }}" disabled>
                   </div>
                 </div>
-                <div class="row">
-                  <div class="col-lg-6">
-                    <div class="form-group">
-                      <label class="form-control-label" for="input-first-name">First
-                        name</label>
-                      <input type="text" id="input-first-name"
-                             class="form-control" placeholder="First name"
-                             value="{{ object.first_name }}" disabled>
-                    </div>
-                  </div>
-                  <div class="col-lg-6">
-                    <div class="form-group">
-                      <label class="form-control-label" for="input-last-name">Last
-                        name</label>
-                      <input type="text" id="input-last-name"
-                             class="form-control" placeholder="Last name"
-                             value="{{ object.last_name }}" disabled>
-                    </div>
+                <div class="col-lg-6">
+                  <div class="form-group">
+                    <label class="form-control-label" for="input-email">Email
+                      address</label>
+                    <input type="email" id="input-email" class="form-control"
+                           placeholder="Email" value="{{ object.email }}"
+                           disabled>
                   </div>
                 </div>
               </div>
-              <hr class="my-4"/>
-              <!-- Address -->
-              <h6 class="heading-small text-muted mb-4">Contact
-                information</h6>
-              <div class="pl-lg-4">
-                <div class="row">
-                  <div class="col-lg-4">
-                    <div class="form-group">
-                      <label class="form-control-label"
-                             for="input-city">Phone number</label>
-                      <input type="text" id="input-phone_number"
-                             class="form-control"
-                             placeholder="Phone number"
-                             value="{{ object.phone_number }}" disabled>
-                    </div>
+              <div class="row">
+                <div class="col-lg-6">
+                  <div class="form-group">
+                    <label class="form-control-label" for="input-first-name">First
+                      name</label>
+                    <input type="text" id="input-first-name"
+                           class="form-control" placeholder="First name"
+                           value="{{ object.first_name }}" disabled>
                   </div>
-                  <div class="col-lg-4">
-                    <div class="form-group">
-                      <label class="form-control-label" for="input-telegram">Telegram</label>
-                      <input type="text" id="input-telegram"
-                             class="form-control" placeholder="Telegram"
-                             value="{{ object.telegram }}" disabled>
-                    </div>
-                  </div>
-                  <div class="col-lg-4">
-                    <div class="form-group">
-                      <label class="form-control-label"
-                             for="input-email">Email</label>
-                      <input type="text" id="input-email"
-                             class="form-control" placeholder="Email"
-                             value="{{ object.email }}" disabled>
-                    </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="form-group">
+                    <label class="form-control-label" for="input-last-name">Last
+                      name</label>
+                    <input type="text" id="input-last-name"
+                           class="form-control" placeholder="Last name"
+                           value="{{ object.last_name }}" disabled>
                   </div>
                 </div>
               </div>
-              <hr class="my-4"/>
-              <!-- Description -->
-              <h6 class="heading-small text-muted mb-4">My tasks</h6>
-              <div class="pl-lg-4">
-                <div class="container">
-                  <h1 style="color: red">NEED TO BE IMPLEMENTED</h1>
-                  {% if object.photo %}
-                    <h1 style="color: red">{{ object.photo.url }}</h1>
-                    <img alt="Image placeholder" src="{{ object.photo. }}">
-                  {% endif %}
+            </div>
+            <hr class="my-4"/>
+            <!-- Address -->
+            <h6 class="heading-small text-muted mb-4">Contact
+              information</h6>
+            <div class="pl-lg-4">
+              <div class="row">
+                <div class="col-lg-4">
+                  <div class="form-group">
+                    <label class="form-control-label"
+                           for="input-city">Phone number</label>
+                    <input type="text" id="input-phone_number"
+                           class="form-control"
+                           placeholder="Phone number"
+                           value="{{ object.phone_number }}" disabled>
+                  </div>
+                </div>
+                <div class="col-lg-4">
+                  <div class="form-group">
+                    <label class="form-control-label" for="input-telegram">Telegram</label>
+                    <input type="text" id="input-telegram"
+                           class="form-control" placeholder="Telegram"
+                           value="{{ object.telegram }}" disabled>
+                  </div>
+                </div>
+                <div class="col-lg-4">
+                  <div class="form-group">
+                    <label class="form-control-label"
+                           for="input-email">Email</label>
+                    <input type="text" id="input-email"
+                           class="form-control" placeholder="Email"
+                           value="{{ object.email }}" disabled>
+                  </div>
                 </div>
               </div>
-            </form>
+            </div>
+            <hr class="my-4"/>
+            <!-- Description -->
+            <h6 class="heading-small text-muted mb-4">My projects</h6>
+            <div class="pl-lg-4">
+              {% if worker_projects or lead_projects %}
+                <table class="table table-bordered mt-4">
+                  <thead>
+                  <tr style="width: 20rem"></tr>
+                  </thead>
+                  <tbody class="table-group-divider">
+                  <tr class="table-light">
+                    {% if worker_projects %}
+                      {% for project in worker_projects %}
+                        <td>
+                          {% include 'includes/project_card_profile.html' %}
+                        </td>
+                        {% if forloop.counter|divisibleby:4 and not forloop.last %}
+                          </tr>
+                          <tr class="table-light">
+                        {% endif %}
+                      {% endfor %}
+                    {% else %}
+                    {% for project in lead_projects %}
+                      <td>
+                        {% include 'includes/project_card_profile.html' %}
+                      </td>
+                      {% if forloop.counter|divisibleby:4 and not forloop.last %}
+                        </tr>
+                        <tr class="table-light">
+                      {% endif %}
+                    {% endfor %}
+                    {% endif %}
+                    </tr>
+                  </tbody>
+                </table>
+              {% else %}
+                <p>There are no projects.</p>
+              {% endif %}
+            </div>
           </div>
         </div>
       </div>
     </div>
 
-    {#    {% include "includes/footer.html" %}#}
 
   </div>
 
