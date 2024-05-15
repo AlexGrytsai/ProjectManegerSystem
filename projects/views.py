@@ -3,7 +3,7 @@ from django.contrib.auth.mixins import UserPassesTestMixin
 from django.db.models import Count
 from django.db.models import F
 from django.db.models import Q
-from django.http import Http404
+from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
 from django.views.generic import DeleteView
@@ -136,10 +136,9 @@ class TaskListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs) -> dict:
         context = super(TaskListView, self).get_context_data(**kwargs)
-        context["project_id"] = self.kwargs.get("project_id")
 
         project = Project.objects.get(id=self.kwargs.get("project_id"))
-        context["project_lead_id"] = project.project_lead_id
+        context["project"] = project
 
         return context
 
@@ -155,17 +154,37 @@ class TaskCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
                 self.check_responsible_worker()
         )
 
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super(TaskCreateView, self).form_valid(form)
+
+    def get_form_kwargs(self) -> dict[str, dict]:
+        kwargs = super(TaskCreateView, self).get_form_kwargs()
+        kwargs["project"] = self.get_project()
+        return kwargs
+
     def get_project(self) -> Project:
-        try:
+        if not hasattr(self, "_project"):
             project_id = self.kwargs.get("project_id")
-            project = Project.objects.get(id=project_id)
+            self._project = get_object_or_404(Project, id=project_id)
 
-            return project
+        return self._project
 
-        except Project.DoesNotExist:
-            raise Http404("Project does not exist")
+    def get_context_data(self, **kwargs):
+        context = super(TaskCreateView, self).get_context_data(**kwargs)
+        project = self.get_project()
+        context["project"] = project
+        return context
 
     def check_responsible_worker(self) -> bool:
-        project = self.get_project()
+        project = self.get_context_data().get("project")
 
         return self.request.user in project.responsible_workers.all()
+
+    def get_success_url(self) -> str:
+        next_url = self.request.GET.get("next")
+        if next_url:
+            return next_url
+        return reverse_lazy(
+            "projects:project-detail", args=[self.kwargs.get("project_id")]
+        )
