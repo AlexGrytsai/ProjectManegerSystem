@@ -15,6 +15,7 @@ from pathlib import Path
 from credentials import aws_postgres
 from credentials import aws_s3
 from credentials import social_auth
+from credentials import djanogo
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-yzxyww7znf@8zhk28r)3tinwicsy_w=_8n$c5ph8u(a_rm+5)%"
+SECRET_KEY = djanogo.secret_key
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
