@@ -2,7 +2,7 @@ from django import forms
 from django.db.models import Q
 
 from users.models import WorkerUser
-from .models import Project
+from .models import Project, Task
 
 
 class ProjectCreateForm(forms.ModelForm):
@@ -53,3 +53,32 @@ class ProjectUpdateForm(forms.ModelForm):
             "project_lead",
             "responsible_workers"
         )
+
+
+class TaskCreateForm(forms.ModelForm):
+    deadline = forms.DateField(
+        widget=forms.widgets.DateInput(attrs={"type": "date"}),
+        required=False
+    )
+    responsible_workers = forms.ModelMultipleChoiceField(
+        queryset=WorkerUser.objects.none(),
+        widget=forms.CheckboxSelectMultiple, required=False
+    )
+
+    class Meta:
+        model = Task
+        fields = (
+            "name",
+            "description",
+            "deadline",
+            "type",
+            "priority",
+            "responsible_workers",
+        )
+
+    def __init__(self, project, *args, **kwargs) -> None:
+        super(TaskCreateForm, self).__init__(*args, **kwargs)
+        self.fields["responsible_workers"].queryset = (
+            project.responsible_workers.all()
+        )
+
