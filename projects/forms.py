@@ -82,3 +82,28 @@ class TaskCreateForm(forms.ModelForm):
             project.responsible_workers.all()
         )
 
+
+class TaskUpdateForm(forms.ModelForm):
+    deadline = forms.DateField(
+        widget=forms.widgets.DateInput(attrs={"type": "date"}),
+        required=False
+    )
+
+    responsible_workers = forms.ModelMultipleChoiceField(
+        queryset=WorkerUser.objects.none(),
+        widget=forms.CheckboxSelectMultiple, required=False
+    )
+
+    class Meta:
+        model = Task
+        fields = (
+            "name",
+            "description",
+            "deadline",
+            "type",
+            "priority",
+            "status",
+            "type",
+            "priority",
+            "responsible_workers",
+        )

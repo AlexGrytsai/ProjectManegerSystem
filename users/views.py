@@ -1,6 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.mixins import UserPassesTestMixin
-from django.db.models import Q, Count
+from django.db.models import Q, Count, QuerySet
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
@@ -50,7 +50,7 @@ class AddWorkerView(
     def test_func(self):
         return self.request.user.role == "Supervisor"
 
-    def get_context_data(self, **kwargs):
+    def get_context_data(self, **kwargs) -> dict:
         context = super(AddWorkerView, self).get_context_data(**kwargs)
         context["referer"] = self.request.META.get("HTTP_REFERER")
         context["is_update"] = False
@@ -73,7 +73,7 @@ class WorkerDetailView(LoginRequiredMixin, BaseBreadcrumbMixin, DetailView):
         ("Profile", "")
     ]
 
-    def get_context_data(self, **kwargs):
+    def get_context_data(self, **kwargs) -> dict:
         context = super(WorkerDetailView, self).get_context_data(**kwargs)
         user = self.object
 
@@ -116,19 +116,19 @@ class WorkerUpdateView(
         ("Edit", "")
     ]
 
-    def test_func(self):
+    def test_func(self) -> bool:
         return (
                 self.get_object().id == self.request.user.id
                 or self.request.user.role == "Supervisor"
         )
 
-    def get_form_kwargs(self):
+    def get_form_kwargs(self) -> dict:
         kwargs = super().get_form_kwargs()
         kwargs["user_role"] = self.request.user.role
 
         return kwargs
 
-    def get_context_data(self, **kwargs):
+    def get_context_data(self, **kwargs) -> dict:
         context = super(WorkerUpdateView, self).get_context_data(**kwargs)
         next_url = self.request.GET.get("next")
         if next_url:
@@ -136,7 +136,7 @@ class WorkerUpdateView(
         context["is_update"] = True
         return context
 
-    def get_success_url(self):
+    def get_success_url(self) -> str:
         next_url = self.request.GET.get("next")
         if next_url:
             return next_url
@@ -153,7 +153,7 @@ class WorkerListView(LoginRequiredMixin, BaseBreadcrumbMixin, ListView):
 
     crumbs = [("", "Home"), ("My CoWorkers", ""), ]
 
-    def get_context_data(self, *, object_list=None, **kwargs):
+    def get_context_data(self, *, object_list=None, **kwargs) -> dict:
         context = super(WorkerListView, self).get_context_data(**kwargs)
         context["total_workers"] = WorkerUser.objects.count()
 
@@ -175,7 +175,7 @@ class WorkerListView(LoginRequiredMixin, BaseBreadcrumbMixin, ListView):
 
         return context
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet:
         queryset = WorkerUser.objects.all()
         form = WorkerSearchForm(self.request.GET)
         project_id = self.kwargs.get("project_id")

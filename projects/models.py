@@ -77,7 +77,7 @@ class Task(models.Model):
         verbose_name_plural = "tasks"
 
     def __str__(self):
-        return f"{self.name} by {self.author}"
+        return f"{self.name}"
 
 
 class ProjectStatus(models.TextChoices):
