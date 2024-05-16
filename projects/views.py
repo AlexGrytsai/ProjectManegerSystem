@@ -3,7 +3,7 @@ from django.contrib.auth.mixins import UserPassesTestMixin
 from django.db.models import Count
 from django.db.models import F
 from django.db.models import Q
-from django.shortcuts import get_object_or_404
+from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
 from django.views.generic import DeleteView
@@ -12,11 +12,12 @@ from django.views.generic import ListView
 from django.views.generic import UpdateView
 from view_breadcrumbs import BaseBreadcrumbMixin
 
-from .forms import ProjectCreateForm
+from .forms import ProjectCreateForm, TaskUpdateForm
 from .forms import ProjectUpdateForm
 from .forms import TaskCreateForm
 from .models import Project
 from .models import Task
+from .project_mixins import TaskMixin
 
 
 class ProjectCreateView(
@@ -143,7 +144,12 @@ class TaskListView(LoginRequiredMixin, ListView):
         return context
 
 
-class TaskCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
+class TaskCreateView(
+    LoginRequiredMixin,
+    TaskMixin,
+    UserPassesTestMixin,
+    CreateView
+):
     model = Task
     form_class = TaskCreateForm
     template_name = "projects/task_form.html"
@@ -154,8 +160,11 @@ class TaskCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
                 self.check_responsible_worker()
         )
 
-    def form_valid(self, form):
+    def form_valid(self, form) -> HttpResponseRedirect:
+        project = self.get_project()
         form.instance.author = self.request.user
+        form.instance.save()
+        project.tasks.add(form.instance)
         return super(TaskCreateView, self).form_valid(form)
 
     def get_form_kwargs(self) -> dict[str, dict]:
@@ -163,28 +172,31 @@ class TaskCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         kwargs["project"] = self.get_project()
         return kwargs
 
-    def get_project(self) -> Project:
-        if not hasattr(self, "_project"):
-            project_id = self.kwargs.get("project_id")
-            self._project = get_object_or_404(Project, id=project_id)
-
-        return self._project
-
-    def get_context_data(self, **kwargs):
+    def get_context_data(self, **kwargs) -> dict:
         context = super(TaskCreateView, self).get_context_data(**kwargs)
         project = self.get_project()
         context["project"] = project
         return context
 
-    def check_responsible_worker(self) -> bool:
-        project = self.get_context_data().get("project")
 
-        return self.request.user in project.responsible_workers.all()
+class TaskUpdateView(
+    LoginRequiredMixin,
+    TaskMixin,
+    UserPassesTestMixin,
+    UpdateView
+):
+    model = Task
+    form_class = TaskUpdateForm
+    template_name = "projects/task_form.html"
 
-    def get_success_url(self) -> str:
-        next_url = self.request.GET.get("next")
-        if next_url:
-            return next_url
-        return reverse_lazy(
-            "projects:project-detail", args=[self.kwargs.get("project_id")]
+    def test_func(self) -> bool:
+        return (
+                self.request.user.role == "Supervisor" or
+                self.check_responsible_worker()
         )
+
+    def get_context_data(self, **kwargs) -> dict:
+        context = super(TaskUpdateView, self).get_context_data(**kwargs)
+        project = self.get_project()
+        context["project"] = project
+        return context
