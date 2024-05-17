@@ -1,11 +1,13 @@
 <div class="card mx-auto" style="width: 18rem;">
-  <div class="card-header">
-    <strong>
-      {{ project.name }}
-    </strong>
-    <br>
-    <strong>Status:</strong> {{ project.status }}
-  </div>
+  <a href="{% url 'projects:project-detail' project.id %}">
+    <div class="card-header">
+      <strong>
+        {{ project.name }}
+      </strong>
+      <br>
+      <strong>Status:</strong> {{ project.status }}
+    </div>
+  </a>
   <div class="card-body">
     <h5 class="card-title">Describe</h5>
     <p class="card-text text-wrap">
@@ -13,9 +15,9 @@
     </p>
   </div>
   <ul class="list-group list-group-flush">
-    <li class="list-group-item">
-      <b>Project lead:</b>
-      <a href="{% url 'users:worker-detail' pk=project.project_lead_id %}">
+    <a href="{% url 'users:worker-detail' pk=project.project_lead_id %}">
+      <li class="list-group-item">
+        <b>Project lead:</b>
         {% if project.project_lead.first_name and project.project_lead.last_name %}
           {{ project.project_lead.first_name }}
           {{ project.project_lead.last_name }}
@@ -23,8 +25,8 @@
           {{ project.project_lead.username }}
 
         {% endif %}
-      </a>
-    </li>
+      </li>
+    </a>
     <li class="list-group-item">
       <b>Deadline:</b>
       {{ project.deadline }}

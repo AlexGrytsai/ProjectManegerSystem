@@ -193,8 +193,8 @@
                   <tr style="width: 20rem"></tr>
                   </thead>
                   <tbody class="table-group-divider">
-                  <tr class="table-light">
-                    {% if worker_projects %}
+                  {% if worker_projects %}
+                    <tr class="table-light">
                       {% for project in worker_projects %}
                         <td>
                           {% include 'includes/project_card_profile.html' %}
@@ -204,18 +204,20 @@
                           <tr class="table-light">
                         {% endif %}
                       {% endfor %}
-                    {% else %}
-                    {% for project in lead_projects %}
-                      <td>
-                        {% include 'includes/project_card_profile.html' %}
-                      </td>
-                      {% if forloop.counter|divisibleby:4 and not forloop.last %}
-                        </tr>
-                        <tr class="table-light">
-                      {% endif %}
-                    {% endfor %}
-                    {% endif %}
-                    </tr>
+                  {% endif %}
+                  {% if lead_projects %}
+                    <tr class="table-light">
+                      {% for project in lead_projects %}
+                        <td>
+                          {% include 'includes/project_card_profile.html' %}
+                        </td>
+                        {% if forloop.counter|divisibleby:4 and not forloop.last %}
+                          </tr>
+                          <tr class="table-light">
+                        {% endif %}
+                      {% endfor %}
+                  {% endif %}
+                  </tr>
                   </tbody>
                 </table>
               {% else %}

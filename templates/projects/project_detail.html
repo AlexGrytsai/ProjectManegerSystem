@@ -29,7 +29,7 @@
                         </li>
                         <li class="nav-item">
                           <a class="nav-link"
-                             href="{% url 'projects:task-list' project.id %}">
+                             href="{% url 'projects:project-task-list' project.id %}">
                             Tasks
                           </a>
                         </li>
@@ -58,16 +58,30 @@
                     </div>
                   </div>
                   <div class="row">
-                    <div class="col-lg-5">
+                    <div class="col-lg-10">
+                      <div class="form-group">
+                        <label class="form-control-label">Status</label>
+                        <a class="form-control">{{ object.status }}</a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-lg-3">
+                      <div class="form-group">
+                        <label class="form-control-label">Deadline</label>
+                        <a class="form-control">{{ object.deadline }}</a>
+                      </div>
+                    </div>
+                    <div class="col-lg-4">
                       <div class="form-group">
                         <label class="form-control-label">Create date</label>
                         <a class="form-control">{{ object.created_at|date:"M d, Y" }}</a>
                       </div>
                     </div>
-                    <div class="col-lg-5">
+                    <div class="col-lg-3">
                       <div class="form-group">
-                        <label class="form-control-label">Deadline</label>
-                        <a class="form-control">{{ object.deadline }}</a>
+                        <label class="form-control-label">Last update</label>
+                        <a class="form-control">{{ object.updated|date:"M d, Y" }}</a>
                       </div>
                     </div>
                   </div>
