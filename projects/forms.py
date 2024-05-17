@@ -1,7 +1,7 @@
 from django import forms
 from django.db.models import Q
 
-from users.models import WorkerUser
+from users.models import WorkerUser, Role
 from .models import Project, Task
 
 
@@ -10,9 +10,9 @@ class ProjectCreateForm(forms.ModelForm):
         widget=forms.widgets.DateInput(attrs={"type": "date"}),
         required=False
     )
-    conditions = Q(is_active=True) & Q(role="Engineer/Manager")
-    project_lead = forms.ModelChoiceField(
-        queryset=WorkerUser.objects.filter(role="Supervisor")
+    conditions = (
+            Q(is_active=True) &
+            Q(role="Engineer/Manager") | Q(role="Supervisor")
     )
     responsible_workers = forms.ModelMultipleChoiceField(
         queryset=WorkerUser.objects.filter(conditions).order_by("position"),
@@ -25,8 +25,8 @@ class ProjectCreateForm(forms.ModelForm):
         fields = (
             "name",
             "description",
+            "status",
             "deadline",
-            "project_lead",
             "responsible_workers"
         )
 
@@ -36,7 +36,10 @@ class ProjectUpdateForm(forms.ModelForm):
         widget=forms.widgets.DateInput(attrs={"type": "date"}),
         required=False
     )
-    conditions = Q(is_active=True) & Q(role="Engineer/Manager")
+    conditions = (
+            Q(is_active=True) &
+            Q(role="Engineer/Manager") | Q(role="Supervisor")
+    )
     responsible_workers = forms.ModelMultipleChoiceField(
         queryset=WorkerUser.objects.filter(conditions).order_by("position"),
         widget=forms.CheckboxSelectMultiple,
@@ -107,3 +110,19 @@ class TaskUpdateForm(forms.ModelForm):
             "priority",
             "responsible_workers",
         )
+
+    def __init__(self, project, *args, **kwargs) -> None:
+        user_role = kwargs.pop("user_role")
+        super(TaskUpdateForm, self).__init__(*args, **kwargs)
+        self.fields["responsible_workers"].queryset = (
+            project.responsible_workers.all()
+        )
+
+        if user_role != Role.SUPERVISOR:
+            self.fields["name"].widget.attrs["readonly"] = True
+            self.fields["description"].widget.attrs["readonly"] = True
+            self.fields["deadline"].widget.attrs["readonly"] = True
+            self.fields["type"].widget.attrs["readonly"] = True
+            self.fields["priority"].widget.attrs["readonly"] = True
+            self.fields.pop("responsible_workers")
+
