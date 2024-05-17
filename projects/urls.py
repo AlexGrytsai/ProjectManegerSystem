@@ -3,10 +3,12 @@ from django.urls import path
 from users.views import WorkerListView
 from .views import ProjectCreateView
 from .views import ProjectDeleteView
+from .views import ProjectDetailTasksView
 from .views import ProjectDetailView
 from .views import ProjectListView
 from .views import ProjectUpdateView
 from .views import TaskCreateView
+from .views import TaskDeleteView
 from .views import TaskListView
 from .views import TaskUpdateView
 
@@ -14,7 +16,7 @@ urlpatterns = [
     path("projects/create/",
          ProjectCreateView.as_view(),
          name="create-project"),
-    path("projects/list", ProjectListView.as_view(), name="project-list"),
+    path("projects/", ProjectListView.as_view(), name="project-list"),
     path(
         "projects/<int:project_id>/workers/",
         WorkerListView.as_view(),
@@ -36,19 +38,29 @@ urlpatterns = [
         name="project-detail"
     ),
     path(
-        "projects/<int:project_id>/tasks/list/",
-        TaskListView.as_view(),
-        name="task-list"
+        "projects/<int:pk>/tasks-list/",
+        ProjectDetailTasksView.as_view(),
+        name="project-task-list"
     ),
     path(
         "projects/<int:project_id>/tasks/create/",
         TaskCreateView.as_view(),
-        name="create-task"
+        name="task-create"
     ),
     path(
         "projects/<int:project_id>/tasks/<int:pk>/update/",
         TaskUpdateView.as_view(),
-        name="update-task"
+        name="task-update"
+    ),
+    path(
+        "projects/<int:project_id>/tasks/<int:pk>/delete/",
+        TaskDeleteView.as_view(),
+        name="task-delete"
+    ),
+    path(
+        "projects/tasks/",
+        TaskListView.as_view(),
+        name="task-list"
     )
     # path(
     #     "projects/<int:project_id>/tasks/<int:pk>/toggle-assign/",
