@@ -112,7 +112,7 @@ class Project(models.Model):
         null=True
     )
     tasks = models.ManyToManyField(
-        Task, related_name="projects", blank=True, null=True
+        Task, related_name="project_tasks", blank=True, null=True
     )
 
     class Meta:
