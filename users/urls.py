@@ -25,7 +25,7 @@ urlpatterns = [
         WorkerUpdateView.as_view(),
         name="worker-update",
     ),
-    path("accounts/workers/", WorkerListView.as_view(), name="worker-list"),
+    path("workers/", WorkerListView.as_view(), name="worker-list"),
 ]
 
 app_name = "users"
