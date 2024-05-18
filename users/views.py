@@ -1,6 +1,8 @@
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.db.models import Q, Count, QuerySet
+from django.http import HttpRequest, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
@@ -10,7 +12,7 @@ from django.views.generic import TemplateView
 from django.views.generic import UpdateView
 from view_breadcrumbs import BaseBreadcrumbMixin
 
-from projects.models import Project
+from projects.models import Project, Task
 from .forms import AddWorkerForm
 from .forms import RegisterForm
 from .forms import WorkerSearchForm
@@ -195,3 +197,19 @@ class WorkerListView(LoginRequiredMixin, BaseBreadcrumbMixin, ListView):
             return queryset.filter(search_conditions)
 
         return queryset
+
+
+@login_required
+def toggle_assign_to_task(
+        request: HttpRequest,
+        project_id: int,
+        pk: int
+) -> HttpResponseRedirect:
+    worker = request.user
+    task = get_object_or_404(Task, id=pk)
+    if worker in task.responsible_workers.all():
+        task.responsible_workers.remove(worker)
+    else:
+        task.responsible_workers.add(worker)
+    return HttpResponseRedirect(
+        reverse_lazy("projects:project-task-list", args=[project_id]))
