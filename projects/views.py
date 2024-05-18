@@ -85,7 +85,9 @@ class ProjectListView(LoginRequiredMixin, BaseBreadcrumbMixin, ListView):
                 filter=Q(tasks__status=TackStatus.DONE),
                 distinct=True
             ),
-            responsible_workers_count=Count("responsible_workers"),
+            responsible_workers_count=Count(
+                "responsible_workers", distinct=True
+            ),
             project_lead_username=F("project_lead__username"),
             project_lead_first_name=F("project_lead__first_name"),
             project_lead_last_name=F("project_lead__last_name"),
