@@ -1,0 +1,66 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}Project Detail{% endblock title %}
+
+{% block content %}
+  <div class="header pb-6 d-flex align-items-center"
+       style="min-height: 150px; background-size: cover; background-position: center top;">
+    <!-- Mask -->
+    <span class="mask bg-gradient-default opacity-8"></span>
+  </div>
+  <!-- Page content -->
+  <div class="container-fluid mt--7">
+    <div class="row justify-content-center">
+      <div class="col-xl-5 order-xl-1">
+        <div class="card mx-auto">
+          <div class="card-body">
+            <div class="pl-lg-4">
+              <div class="order-xl-5">
+                <div class="row">
+                  <div class="col-lg-6">
+                    <div class="form-group">
+                      <ul class="nav nav-pills nav-fill">
+                        <li class="nav-item">
+                          <a class="nav-link"
+                             href="{% url 'projects:project-detail' object.id %}">
+                            Overview
+                          </a>
+                        </li>
+                        <li class="nav-item active" aria-current="page">
+                          <a class="nav-link active"
+                             href="{% url 'projects:project-task-list' object.id %}">
+                            Tasks
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="col-lg-6">
+                    <div class="d-flex justify-content-end align-items-center">
+                      <a href="{% url 'projects:task-create' object.id %}?next={{ request.path }}"
+                         class="btn btn-primary">
+                        Add new a task
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                <hr class="my-2"/>
+              {% if object.tasks %}
+                {% for task in object.tasks.all %}
+                  {% include "includes/task_card.html" %}
+                {% endfor %}
+              {% else %}
+                There are no tasks yet.
+              {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock content %}
+
+<!-- Specific JS goes HERE -->
+{% block javascripts %}{% endblock javascripts %}

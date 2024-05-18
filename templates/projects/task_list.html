@@ -1,71 +1,69 @@
 {% extends 'layouts/base.html' %}
 
-{% block title %}Project Detail{% endblock title %}
+{% block title %}All Tasks{% endblock title %}
 
 {% block content %}
+
   <div class="header pb-6 d-flex align-items-center"
        style="min-height: 300px; background-size: cover; background-position: center top;">
     <!-- Mask -->
     <span class="mask bg-gradient-default opacity-8"></span>
-    <!-- Header container -->
     <div class="container-fluid d-flex align-items-center">
       <div class="row" style="white-space: nowrap">
         <div class="col-lg-7 col-md-10">
           <h1 class="display-2 text-white">
-            Project {{ project.name }}
+            All Tasks
           </h1>
-          {% if request.user.role == "Supervisor" %}
-            <a href="{% url 'projects:update-project' pk=project.id %}?next={{ request.path }}"
-               class="btn btn-neutral">Edit project</a>
-          {% endif %}
         </div>
       </div>
     </div>
   </div>
   <!-- Page content -->
-  <div class="container-fluid mt--7">
-    <div class="row justify-content-center">
-      <div class="col-xl-5 order-xl-1">
-        <div class="card mx-auto">
-          <div class="card-body">
+  <div class="container-fluid mt--9">
+  <div class="row">
+    <div class="col-xl-12 order-xl-1">
+      <div class="card">
+        <div class="card-body">
+          <form>
             <div class="pl-lg-4">
-              <div class="order-xl-5">
-                <div class="row mb-4">
-                  <ul class="nav nav-pills nav-fill">
-                    <li class="nav-item">
-                      <a class="nav-link"
-                         href="{% url 'projects:project-detail' pk=project.id %}">
-                        Overview
-                      </a>
-                    </li>
-                    <li class="nav-item active" aria-current="page">
-                      <a class="nav-link active"
-                         href="{% url 'projects:task-list' project.id %}">
-                        Tasks
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link disabled" aria-disabled="true">
-                        Files
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-                <h6 class="heading-small text-muted mb-4">
-                  Project tasks
-                </h6>
-                <a href="{% url 'projects:create-task' project.id %}?next={{ request.path }}"
-                   class="btn btn-primary">
-                  Add new task
-                </a>
-                <hr class="my-4"/>
+              <div class="row">
+                {% if task_list %}
+                  <table class="table table-bordered mt-4">
+                    <thead>
+                    <tr style="width: 20rem"></tr>
+                    </thead>
+                    <tbody class="table-group-divider">
+                    <tr class="table-light">
+                      {% for task in task_list %}
+                        {% for project in task.project_tasks.all %}
+                        <td>
+                          {% include 'includes/task_card.html' %}
+                        </td>
+                        {% if forloop.counter|divisibleby:4 and not forloop.last %}
+                          </tr>
+                          <tr class="table-light">
+                        {% endif %}
+                          {% endfor %}
+                      {% endfor %}
+                      </tr>
+                    </tbody>
+                  </table>
+
+                {% else %}
+                  <p>There are no tasks in the service.</p>
+                {% endif %}
+              </div>
+              <hr class="my-4"/>
+              <div class="text-center mx-auto">
+                {% include 'includes/pagination.html' %}
               </div>
             </div>
-          </div>
         </div>
       </div>
     </div>
+
   </div>
+  
 
 {% endblock content %}
 

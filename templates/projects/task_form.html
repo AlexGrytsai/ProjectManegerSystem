@@ -20,7 +20,7 @@
               {% if is_update %}
                 Update the task
                 {% if project.id %}
-                  <a href="#"
+                  <a href="{% url 'projects:task-delete' project.id task.id %}"
                      class="btn btn-danger link-to-page">
                     Delete
                   </a>
