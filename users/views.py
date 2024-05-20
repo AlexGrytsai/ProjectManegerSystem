@@ -1,8 +1,10 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.mixins import UserPassesTestMixin
+from django.core.exceptions import PermissionDenied
 from django.db.models import Q, Count, QuerySet
-from django.http import HttpRequest, HttpResponseRedirect
+from django.http import HttpRequest
+from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
@@ -199,12 +201,27 @@ class WorkerListView(LoginRequiredMixin, BaseBreadcrumbMixin, ListView):
         return queryset
 
 
+def get_project(request: HttpRequest, project_id: int) -> Project:
+    project = get_object_or_404(Project, id=project_id)
+    return project
+
+
+def check_responsible_worker(request: HttpRequest, project_id: int) -> bool:
+    project = get_project(request, project_id)
+    return request.user in project.responsible_workers.all()
+
+
 @login_required
 def toggle_assign_to_task(
         request: HttpRequest,
         project_id: int,
         pk: int
 ) -> HttpResponseRedirect:
+    if request.user.role != "Supervisor" or not check_responsible_worker(
+            request, project_id
+    ):
+        raise PermissionDenied
+
     worker = request.user
     task = get_object_or_404(Task, id=pk)
     if worker in task.responsible_workers.all():

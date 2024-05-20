@@ -2,7 +2,7 @@ from django import forms
 from django.db.models import Q
 
 from users.models import WorkerUser, Role
-from .models import Project, Task
+from .models import Project, Task, Comment
 
 
 class ProjectCreateForm(forms.ModelForm):
@@ -126,3 +126,8 @@ class TaskUpdateForm(forms.ModelForm):
             self.fields["priority"].widget.attrs["readonly"] = True
             self.fields.pop("responsible_workers")
 
+
+class CommentCreatForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ("text",)

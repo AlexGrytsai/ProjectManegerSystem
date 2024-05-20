@@ -12,6 +12,7 @@ from .views import TaskDeleteView
 from .views import TaskListView
 from .views import TaskUpdateView
 from .views import TaskDetailView
+from .views import CommentCreatView
 
 urlpatterns = [
     path("projects/create/",
@@ -72,6 +73,11 @@ urlpatterns = [
         "projects/<int:project_id>/tasks/<int:pk>/detail/",
         TaskDetailView.as_view(),
         name="task-detail",
+    ),
+    path(
+        "projects/<int:project_id>/tasks/<int:pk>/comments/create/",
+        CommentCreatView.as_view(),
+        name="comment-create",
     ),
 ]
 

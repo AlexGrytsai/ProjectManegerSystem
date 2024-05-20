@@ -5,6 +5,7 @@ from django.db.models import Count
 from django.db.models import F
 from django.db.models import Q
 from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
 from django.views.generic import DeleteView
@@ -13,11 +14,14 @@ from django.views.generic import ListView
 from django.views.generic import UpdateView
 from view_breadcrumbs import BaseBreadcrumbMixin
 
+from .forms import CommentCreatForm
 from .forms import ProjectCreateForm
 from .forms import ProjectUpdateForm
 from .forms import TaskCreateForm
 from .forms import TaskUpdateForm
-from .models import Project, TackStatus
+from .models import Comment
+from .models import Project
+from .models import TackStatus
 from .models import Task
 from .project_mixins import TaskMixin
 
@@ -166,8 +170,9 @@ class ProjectDetailTasksView(LoginRequiredMixin, DetailView):
     model = Project
     template_name = "projects/project_task_list.html"
     queryset = Project.objects.prefetch_related(
+        "responsible_workers",
         "tasks",
-        "tasks__responsible_workers"
+        "tasks__responsible_workers",
     )
 
     def get_context_data(self, **kwargs) -> dict:
@@ -322,15 +327,36 @@ class TaskDeleteView(
 class TaskDetailView(
     LoginRequiredMixin,
     TaskMixin,
-    UserPassesTestMixin,
     DetailView
 ):
     model = Task
     template_name = "projects/task_detail.html"
     context_object_name = "task"
     queryset = Task.objects.select_related("author").prefetch_related(
-        "responsible_workers"
+        "responsible_workers", "comments", "comments__author",
     )
+
+    def get_context_data(self, **kwargs) -> dict:
+        context = super(TaskDetailView, self).get_context_data(**kwargs)
+        next_url = self.request.GET.get("next")
+        if next_url:
+            context["referer"] = next_url
+        task = self.object
+        project = task.project_tasks.first()
+        context["project_id"] = project.id
+        context["responsible_workers"] = project.responsible_workers.all()
+        return context
+
+
+class CommentCreatView(
+    LoginRequiredMixin,
+    TaskMixin,
+    UserPassesTestMixin,
+    CreateView
+):
+    model = Comment
+    form_class = CommentCreatForm
+    template_name = "projects/comment_form.html"
 
     def test_func(self):
         return (
@@ -338,11 +364,34 @@ class TaskDetailView(
                 self.check_responsible_worker()
         )
 
+    def get_task(self) -> Task:
+        if not hasattr(self, "_task"):
+            task_id = self.kwargs.get("pk")
+            self._task = get_object_or_404(Task, id=task_id)
+
+        return self._task
+
+    @transaction.atomic
+    def form_valid(self, form) -> HttpResponseRedirect:
+        form.instance.author = self.request.user
+        result = super(CommentCreatView, self).form_valid(form)
+
+        self.get_task().comments.add(form.instance)
+        return result
+
     def get_context_data(self, **kwargs) -> dict:
-        context = super(TaskDetailView, self).get_context_data(**kwargs)
+        context = super(CommentCreatView, self).get_context_data(**kwargs)
         next_url = self.request.GET.get("next")
         if next_url:
             context["referer"] = next_url
-        project = self.get_project()
-        context["project"] = project
+        context["task"] = self.get_task()
         return context
+
+    def get_success_url(self):
+        return reverse_lazy(
+            "projects:task-detail",
+            args=[
+                self.kwargs.get("project_id"),
+                self.kwargs.get("pk")
+            ]
+        )
