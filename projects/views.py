@@ -328,6 +328,9 @@ class TaskDetailView(
     model = Task
     template_name = "projects/task_detail.html"
     context_object_name = "task"
+    queryset = Task.objects.select_related("author").prefetch_related(
+        "responsible_workers"
+    )
 
     def test_func(self):
         return (
@@ -340,4 +343,6 @@ class TaskDetailView(
         next_url = self.request.GET.get("next")
         if next_url:
             context["referer"] = next_url
+        project = self.get_project()
+        context["project"] = project
         return context

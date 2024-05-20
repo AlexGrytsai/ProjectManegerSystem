@@ -11,6 +11,7 @@ from .views import TaskCreateView
 from .views import TaskDeleteView
 from .views import TaskListView
 from .views import TaskUpdateView
+from .views import TaskDetailView
 
 urlpatterns = [
     path("projects/create/",
@@ -68,9 +69,9 @@ urlpatterns = [
         name="toggle-task-assign",
     ),
     path(
-        "projects/<int:project_id>/tasks/<int:pk>/toggle-assign/",
-        toggle_assign_to_task,
-        name="toggle-task-assign",
+        "projects/<int:project_id>/tasks/<int:pk>/detail/",
+        TaskDetailView.as_view(),
+        name="task-detail",
     ),
 ]
 

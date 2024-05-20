@@ -211,5 +211,9 @@ def toggle_assign_to_task(
         task.responsible_workers.remove(worker)
     else:
         task.responsible_workers.add(worker)
+
+    next_url = request.GET.get("next")
+    if next_url:
+        return HttpResponseRedirect(next_url)
     return HttpResponseRedirect(
         reverse_lazy("projects:project-task-list", args=[project_id]))
