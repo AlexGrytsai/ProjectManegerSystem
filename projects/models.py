@@ -19,7 +19,7 @@ class Comment(models.Model):
         verbose_name_plural = "comments"
 
     def __str__(self):
-        return f"{self.text} by {self.author}"
+        return f"{self.text}\nAuthor: {self.author}\nCreated: {self.created}"
 
 
 class TackStatus(models.TextChoices):
