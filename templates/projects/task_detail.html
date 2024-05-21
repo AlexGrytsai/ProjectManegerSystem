@@ -23,21 +23,13 @@
                       <ul class="nav nav-pills nav-fill">
                         <li class="nav-item">
                           <a class="btn btn-outline-primary"
-                             href="{% url 'projects:project-detail' pk=project.id %}">
+                             href="{% url 'projects:project-task-list' project.id %}">
                             Back
                           </a>
                         </li>
                         <li class="nav-item">
-                          {% if request.user in object.responsible_workers.all %}
-                            <a href="{% url 'projects:toggle-task-assign' project_id=project.id pk=task.id %}?next={{ request.path }}"
-                               class="btn btn-danger">
-                              Unassign
-                            </a>
-                          {% else %}
-                            <a href="{% url 'projects:toggle-task-assign' project_id=project.id pk=task.id %}?next={{ request.path }}"
-                               class="btn btn-success">
-                              Assign
-                            </a>
+                          {% if request.user in responsible_workers %}
+                            {% include "includes/assign_task.html" %}
                           {% endif %}
                         </li>
                       </ul>
@@ -75,7 +67,7 @@
                     <div class="col-lg-3">
                       <div class="form-group">
                         <label class="form-control-label">Last update</label>
-                        <a class="form-control">{{ object.updated }}</a>
+                        <a class="form-control">{{ object.updated|date:"Y, F j H:i" }}</a>
                       </div>
                     </div>
                   </div>
@@ -106,8 +98,9 @@
                   <div class="row">
                     <div class="col-lg-10">
                       <div class="form-group">
-                        <label class="form-control-label">Responsible
-                          workers</label>
+                        <label class="form-control-label">
+                          Responsible workers
+                        </label>
                         {% if object.responsible_workers %}
                           {% for worker in object.responsible_workers.all %}
                             <a href="{% url 'users:worker-detail' pk=worker.id %}"
@@ -126,6 +119,41 @@
                       </div>
                     </div>
                   </div>
+                  <div class="row">
+                    <div class="col-lg-10">
+                      <div class="form-group">
+                        <label class="form-control-label">
+                          Comments
+                        </label>
+                        {% if request.user in responsible_workers %}
+                          <a href="{% url 'projects:comment-create' project.id task.id %}?next={{ request.path }}%}"
+                             class="btn btn-outline-success">
+                            +
+                          </a>
+                        {% endif %}
+                        <hr class="my-1"/>
+                        {% if object.comments %}
+                          {% for comment in object.comments.all %}
+                            <p>{{ comment.text|linebreaksbr }}</p>
+                            <strong>Author:</strong> {{ comment.author }}<br>
+                            <strong>Created:</strong>
+                            {{ comment.created|date:"Y, F j H:i" }}
+                            {% if request.user.role == "Supervisor" %}
+                              <div>
+                                <a href="{% url 'projects:comment-update' project.id task.id comment.id %}">
+                                  Edit
+                                </a>
+                                <a href="{% url 'projects:comment-delete' project.id task.id comment.id %}?next={{ request.path }}' %}">
+                                  Delete
+                                </a>
+                              </div>
+                            {% endif %}
+                            <hr class="my-1"/>
+                          {% endfor %}
+                        {% endif %}
+                      </div>
+                    </div>
+                  </div>
                 </div>
                 <hr class="my-4"/>
               </div>
@@ -134,9 +162,6 @@
         </div>
       </div>
     </div>
-
-    {#    {% include "includes/footer.html" %}#}
-
   </div>
 
 
