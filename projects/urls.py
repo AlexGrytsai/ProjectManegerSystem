@@ -1,6 +1,9 @@
 from django.urls import path
 
-from users.views import WorkerListView, toggle_assign_to_task
+from users.views import WorkerListView
+from users.views import toggle_assign_to_task
+from .views import CommentCreatView, CommentDeleteView
+from .views import CommentUpdateView
 from .views import ProjectCreateView
 from .views import ProjectDeleteView
 from .views import ProjectDetailTasksView
@@ -9,10 +12,9 @@ from .views import ProjectListView
 from .views import ProjectUpdateView
 from .views import TaskCreateView
 from .views import TaskDeleteView
+from .views import TaskDetailView
 from .views import TaskListView
 from .views import TaskUpdateView
-from .views import TaskDetailView
-from .views import CommentCreatView
 
 urlpatterns = [
     path("projects/create/",
@@ -78,6 +80,16 @@ urlpatterns = [
         "projects/<int:project_id>/tasks/<int:pk>/comments/create/",
         CommentCreatView.as_view(),
         name="comment-create",
+    ),
+    path(
+        "projects/<int:project_id>/tasks/<int:task_id>/comments/<int:pk>/update/",
+        CommentUpdateView.as_view(),
+        name="comment-update",
+    ),
+    path(
+        "projects/<int:project_id>/tasks/<int:task_id>/comments/<int:pk>/delete/",
+        CommentDeleteView.as_view(),
+        name="comment-delete",
     ),
 ]
 
