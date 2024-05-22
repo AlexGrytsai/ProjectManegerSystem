@@ -29,20 +29,21 @@
     </a>
     <li class="list-group-item">
       <b>Created:</b>
-      {{ project.created_at|date:"M d, Y" }}
-    </li>
-    <li class="list-group-item">
+      {{ project.created_at|date:"Y, F j" }}
+      <br>
       <b>Deadline:</b>
-      {{ project.deadline }}
+      {{ project.deadline|date:"Y, F j" }}
+      <br>
+      <b>Last update:</b>
+      {{ project.updated|date:"Y, F j H:i" }}
     </li>
-    <a href="{% url 'projects:project-task-list' project.id %}">
 
-      <li class="list-group-item">
+    <li class="list-group-item">
+      <a href="{% url 'projects:project-task-list' project.id %}">
         <b>Tasks in progress:</b>
         {{ project.tasks_in_progress_count }}
-      </li>
-    </a>
-    <li class="list-group-item">
+      </a>
+      <br>
       <b>Completed tasks:</b>
       {{ project.tasks_done_count }}
     </li>

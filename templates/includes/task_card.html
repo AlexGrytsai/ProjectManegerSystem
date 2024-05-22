@@ -12,7 +12,11 @@
       <br>
       <strong>Type:</strong> {{ task.type }}
       <br>
-      <strong>Deadline:</strong> {{ task.deadline }}
+      <strong>Created:</strong> {{ task.created|date:"Y, F j" }}
+      <br>
+      <strong>Deadline:</strong> {{ task.deadline|date:"Y, F j" }}
+      <br>
+      <strong>Last update:</strong> {{ task.updated|date:"Y, F j H:i" }}
     </li>
     <li class="list-group-item">
       <a href="{% url 'projects:task-detail' project.id task.id %}?next={{ request.path }}"

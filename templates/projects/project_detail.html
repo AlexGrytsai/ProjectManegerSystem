@@ -78,19 +78,19 @@
                     <div class="col-lg-3">
                       <div class="form-group">
                         <label class="form-control-label">Deadline</label>
-                        <a class="form-control">{{ object.deadline }}</a>
+                        <a class="form-control">{{ object.deadline|date:"Y, F j" }}</a>
                       </div>
                     </div>
                     <div class="col-lg-4">
                       <div class="form-group">
                         <label class="form-control-label">Create date</label>
-                        <a class="form-control">{{ object.created_at|date:"M d, Y" }}</a>
+                        <a class="form-control">{{ object.created_at|date:"Y, F j" }}</a>
                       </div>
                     </div>
                     <div class="col-lg-3">
                       <div class="form-group">
                         <label class="form-control-label">Last update</label>
-                        <a class="form-control">{{ object.updated|date:"M d, Y" }}</a>
+                        <a class="form-control">{{ object.updated|date:"Y, F j H:i" }}</a>
                       </div>
                     </div>
                   </div>
