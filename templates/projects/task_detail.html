@@ -140,10 +140,10 @@
                             {{ comment.created|date:"Y, F j H:i" }}
                             {% if request.user.role == "Supervisor" %}
                               <div>
-                                <a href="{% url 'projects:comment-update' project.id task.id comment.id %}">
+                                <a href="{% url 'projects:comment-update' project.id task.id comment.id %}?next={{ request.path }}">
                                   Edit
                                 </a>
-                                <a href="{% url 'projects:comment-delete' project.id task.id comment.id %}?next={{ request.path }}' %}">
+                                <a href="{% url 'projects:comment-delete' project.id task.id comment.id %}?next={{ request.path }}">
                                   Delete
                                 </a>
                               </div>
