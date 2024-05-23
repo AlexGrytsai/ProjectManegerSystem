@@ -5,7 +5,6 @@ from django.db.models import Count
 from django.db.models import F
 from django.db.models import Q
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
 from django.views.generic import DeleteView
@@ -117,7 +116,6 @@ class ProjectUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     form_class = ProjectUpdateForm
     template_name = "projects/project_form.html"
 
-    # TODO: нужно добавить что бы изменяло дату последнего обновления в Таск и Проект
     def test_func(self) -> bool:
         return self.request.user.role == "Supervisor"
 
@@ -220,7 +218,6 @@ class TaskCreateView(
                 self.check_responsible_worker()
         )
 
-    # TODO: нужно добавить что бы изменяло дату последнего обновления в Таск и Проект
     @transaction.atomic
     def form_valid(self, form) -> HttpResponseRedirect:
         form.instance.author = self.request.user
@@ -229,6 +226,7 @@ class TaskCreateView(
 
         project = self.get_project()
         project.tasks.add(form.instance)
+        project.save(update_fields=["updated"])
         return result
 
     def get_form_kwargs(self) -> dict[str, dict]:
@@ -270,7 +268,6 @@ class TaskUpdateView(
                 self.check_responsible_worker()
         )
 
-    # TODO: нужно добавить что бы изменяло дату последнего обновления в Таск и Проект
     def get_form_kwargs(self) -> dict[str, dict]:
         kwargs = super(TaskUpdateView, self).get_form_kwargs()
         kwargs["user_role"] = self.request.user.role
@@ -311,7 +308,6 @@ class TaskDeleteView(
                 self.request.user.role == "Supervisor"
         )
 
-    # TODO: нужно добавить что бы изменяло дату последнего обновления в Таск и Проект
     def get_context_data(self, **kwargs) -> dict:
         context = super(TaskDeleteView, self).get_context_data(**kwargs)
         next_url = self.request.GET.get("next")
@@ -320,11 +316,8 @@ class TaskDeleteView(
         return context
 
     def get_success_url(self) -> str:
-        next_url = self.request.GET.get("next")
-        if next_url:
-            return next_url
         return reverse_lazy(
-            "projects:task-list"
+            "projects:project-task-list", args=[self.kwargs.get("project_id")]
         )
 
 
@@ -368,19 +361,12 @@ class CommentCreatView(
                 self.check_responsible_worker()
         )
 
-    def get_task(self) -> Task:
-        if not hasattr(self, "_task"):
-            task_id = self.kwargs.get("pk")
-            self._task = get_object_or_404(Task, id=task_id)
-
-        return self._task
-
     @transaction.atomic
     def form_valid(self, form) -> HttpResponseRedirect:
         form.instance.author = self.request.user
         result = super(CommentCreatView, self).form_valid(form)
 
-        task = self.get_task()
+        task = self.get_task("pk")
         task.comments.add(form.instance)
         task.save(update_fields=["updated"])
 
@@ -394,7 +380,7 @@ class CommentCreatView(
         next_url = self.request.GET.get("next")
         if next_url:
             context["referer"] = next_url
-        context["task"] = self.get_task()
+        context["task"] = self.get_task("pk")
         return context
 
     def get_success_url(self):
@@ -412,7 +398,6 @@ class CommentUpdateView(
     UserPassesTestMixin,
     UpdateView
 ):
-    # TODO: нужно добавить что бы изменяло дату последнего обновления в Таск и Проект
     model = Comment
     fields = "__all__"
     template_name = "projects/comment_form.html"
@@ -452,7 +437,6 @@ class CommentDeleteView(
     template_name = "projects/comment_confirm_delete.html"
     success_url = reverse_lazy("projects:task-list")
 
-    # TODO: нужно добавить что бы изменяло дату последнего обновления в Таск и Проект
     def test_func(self):
         return (
                 self.request.user.role == "Supervisor"
