@@ -1,4 +1,4 @@
-<div class="card" style="width: 20rem;">
+<div class="card" style="width: 15rem;">
   <ul class="list-group list-group-flush">
     <a href="{% url 'projects:task-detail' project.id task.id %}?next={{ request.path }}">
       <li class="list-group-item">
@@ -20,10 +20,14 @@
     </li>
     <li class="list-group-item">
       <a href="{% url 'projects:task-detail' project.id task.id %}?next={{ request.path }}"
-         class="btn btn-outline-primary">Detail</a>
+         class="btn btn-outline-primary btn-sm">
+        Detail
+      </a>
       {% if request.user.role == "Supervisor" %}
         <a href="{% url 'projects:task-update' project.id task.id %}?next={{ request.path }}"
-           class="btn btn-outline-warning">Edite</a>
+           class="btn btn-outline-warning btn-sm">
+          Edite
+        </a>
       {% endif %}
       {% if request.user in project.responsible_workers.all %}
         {% include "includes/assign_task.html" %}

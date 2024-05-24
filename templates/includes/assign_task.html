@@ -1,11 +1,11 @@
 {% if request.user in task.responsible_workers.all %}
   <a href="{% url 'projects:toggle-task-assign' project_id=project.id pk=task.id %}?next={{ request.path }}"
-     class="btn btn-danger">
+     class="btn btn-danger btn-sm">
     Unassign
   </a>
 {% else %}
   <a href="{% url 'projects:toggle-task-assign' project_id=project.id pk=task.id %}?next={{ request.path }}"
-     class="btn btn-success">
+     class="btn btn-success btn-sm">
     Assign
   </a>
 {% endif %}

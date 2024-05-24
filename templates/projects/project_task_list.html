@@ -18,9 +18,9 @@
     </div>
   </div>
   <!-- Page content -->
-  <div class="container-fluid mt--7">
+  <div class="container-fluid mt--6">
     <div class="row justify-content-center">
-      <div class="col-xl-6 order-xl-5">
+      <div class="col-xl-10 order-xl-5">
         <div class="card mx-auto">
           <div class="card-body">
             <div class="pl-lg-4">
@@ -55,22 +55,50 @@
                 </div>
                 <hr class="my-2"/>
                 {% if object.tasks %}
-                  <table class="table table-bordered mt-4">
-                    <thead>
-                    <tr style="width: 20rem"></tr>
+                  <table class="table table-bordered border-primary">
+                    <thead class="table-primary">
+                    <tr class="text-center">
+                      <th class="col-3">Created</th>
+                      <th class="col-3">In progress</th>
+                      <th class="col-3">Checking</th>
+                      <th class="col-3">Done</th>
+                    </tr>
                     </thead>
-                    <tbody class="table-group-divider">
-                    <tr class="table-light">
-                      {% for task in object.tasks.all %}
-                        <td>
-                          {% include "includes/task_card.html" %}
-                        </td>
-                        {% if forloop.counter|divisibleby:2 and not forloop.last %}
-                          </tr>
-                          <tr class="table-light">
-                        {% endif %}
-                      {% endfor %}
-                      </tr>
+                    <tbody>
+                    <tr>
+                      <td>
+                        {% for task in object.tasks.all %}
+                          {% if task.status == "Created" %}
+                            {% include "includes/task_card.html" %}
+                            <br>
+                          {% endif %}
+                        {% endfor %}
+                      </td>
+                      <td>
+                        {% for task in object.tasks.all %}
+                          {% if task.status == "In progress" %}
+                            {% include "includes/task_card.html" %}
+                            <br>
+                          {% endif %}
+                        {% endfor %}
+                      </td>
+                      <td>
+                        {% for task in object.tasks.all %}
+                          {% if task.status == "Checking" %}
+                            {% include "includes/task_card.html" %}
+                            <br>
+                          {% endif %}
+                        {% endfor %}
+                      </td>
+                      <td>
+                        {% for task in object.tasks.all %}
+                          {% if task.status == "Done" %}
+                           {% include "includes/task_card.html" %}
+                            <br>
+                          {% endif %}
+                        {% endfor %}
+                      </td>
+                    </tr>
                     </tbody>
                   </table>
                 {% else %}
