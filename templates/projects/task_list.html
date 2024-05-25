@@ -28,26 +28,80 @@
             <div class="pl-lg-4">
               <div class="row">
                 {% if task_list %}
-                  <table class="table table-bordered mt-4">
-                    <thead>
-                    <tr style="width: 20rem"></tr>
+                  <table class="table table-bordered border-primary">
+                    <thead class="table-primary">
+                    <tr class="text-center">
+                      <th class="col-3">Created</th>
+                      <th class="col-3">In progress</th>
+                      <th class="col-3">Checking</th>
+                      <th class="col-3">Done</th>
+                    </tr>
                     </thead>
-                    <tbody class="table-group-divider">
-                    <tr class="table-light">
-                      {% for task in task_list %}
-                        {% for project in task.project_tasks.all %}
-                        <td>
-                          {% include 'includes/task_card.html' %}
-                        </td>
-                        {% if forloop.counter|divisibleby:4 and not forloop.last %}
-                          </tr>
-                          <tr class="table-light">
-                        {% endif %}
+                    <tbody>
+                    <tr>
+                      <td>
+                        {% for task in task_list %}
+                          {% for project in task.project_tasks.all %}
+                            {% if task.status == "Created" %}
+                              {% include "includes/task_card.html" %}
+                              <br>
+                            {% endif %}
                           {% endfor %}
-                      {% endfor %}
-                      </tr>
+                        {% endfor %}
+                      </td>
+                      <td>
+                        {% for task in task_list %}
+                          {% for project in task.project_tasks.all %}
+                            {% if task.status == "In progress" %}
+                              {% include "includes/task_card.html" %}
+                              <br>
+                            {% endif %}
+                          {% endfor %}
+                        {% endfor %}
+                      </td>
+                      <td>
+                        {% for task in task_list %}
+                          {% for project in task.project_tasks.all %}
+                            {% if task.status == "Checking" %}
+                              {% include "includes/task_card.html" %}
+                              <br>
+                            {% endif %}
+                          {% endfor %}
+                        {% endfor %}
+                      </td>
+                      <td>
+                        {% for task in object.tasks.all %}
+                          {% for project in task.project_tasks.all %}
+                            {% if task.status == "Done" %}
+                              {% include "includes/task_card.html" %}
+                              <br>
+                            {% endif %}
+                          {% endfor %}
+                        {% endfor %}
+                      </td>
+                    </tr>
                     </tbody>
                   </table>
+                  {#                  <table class="table table-bordered mt-4">#}
+                  {#                    <thead>#}
+                  {#                    <tr style="width: 20rem"></tr>#}
+                  {#                    </thead>#}
+                  {#                    <tbody class="table-group-divider">#}
+                  {#                    <tr class="table-light">#}
+                  {#                      {% for task in task_list %}#}
+                  {#                        {% for project in task.project_tasks.all %}#}
+                  {#                        <td>#}
+                  {#                          {% include 'includes/task_card.html' %}#}
+                  {#                        </td>#}
+                  {#                        {% if forloop.counter|divisibleby:4 and not forloop.last %}#}
+                  {#                          </tr>#}
+                  {#                          <tr class="table-light">#}
+                  {#                        {% endif %}#}
+                  {#                          {% endfor %}#}
+                  {#                      {% endfor %}#}
+                  {#                      </tr>#}
+                  {#                    </tbody>#}
+                  {#                  </table>#}
                 {% else %}
                   <p>There are no tasks in the service.</p>
                 {% endif %}

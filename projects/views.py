@@ -190,7 +190,9 @@ class TaskListView(LoginRequiredMixin, ListView):
     context_object_name = "task_list"
 
     queryset = Task.objects.prefetch_related(
-        "project_tasks", "responsible_workers"
+        "project_tasks",
+        "responsible_workers",
+        "project_tasks__responsible_workers"
     )
 
     def get_context_data(self, **kwargs) -> dict:
