@@ -104,8 +104,11 @@ def create_groups_and_permissions(sender, **kwargs) -> None:
 
 
 @receiver(post_save, sender="users.WorkerUser")
-def update_user_in_group(sender, instance, **kwargs) -> None:
+def update_user_in_group(sender, instance, update_fields, **kwargs) -> None:
     from django.contrib.auth.models import Group
+
+    if update_fields is not None and "last_activity" in update_fields:
+        return
 
     try:
         old_role = sender.objects.get(pk=instance.pk).role
