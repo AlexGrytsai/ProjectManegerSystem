@@ -68,6 +68,8 @@ class WorkerUser(AbstractUser):
                   "supervisor permissions"
     )
 
+    last_activity = models.DateTimeField(null=True, blank=True)
+
     def clean(self):
         super().clean()
         if self.phone_number:

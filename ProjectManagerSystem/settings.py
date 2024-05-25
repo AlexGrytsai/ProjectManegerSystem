@@ -17,6 +17,8 @@ from credentials import aws_s3
 from credentials import social_auth
 from credentials import djanogo
 
+from users.middleware.update_last_activity import UpdateLastActivityMiddleware
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -61,6 +63,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "social_django.middleware.SocialAuthExceptionMiddleware",
+    "users.middleware.update_last_activity.UpdateLastActivityMiddleware",
 ]
 
 ROOT_URLCONF = "ProjectManagerSystem.urls"
