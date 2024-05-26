@@ -2,10 +2,14 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.core.exceptions import PermissionDenied
-from django.db.models import Q, Count, QuerySet
+from django.db.models import Q
+from django.db.models import Count
+from django.db.models import QuerySet
+from django.db.models import Prefetch
 from django.http import HttpRequest
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
 from django.views.generic import DetailView
@@ -22,9 +26,14 @@ from .forms import WorkerUserUpdateForm
 from .models import WorkerUser
 
 
-class IndexView(LoginRequiredMixin, BaseBreadcrumbMixin, TemplateView):
-    template_name = "index.html"
-    crumbs = [("", "Home"), ]
+class IndexView(LoginRequiredMixin, TemplateView):
+    def get(
+            self,
+            request: HttpRequest,
+            *args,
+            **kwargs
+    ) -> HttpResponseRedirect:
+        return redirect("projects:project-list")
 
 
 class RegisterView(CreateView):
@@ -51,7 +60,7 @@ class AddWorkerView(
         ("Add new Worker", "")
     ]
 
-    def test_func(self):
+    def test_func(self) -> bool:
         return self.request.user.role == "Supervisor"
 
     def get_context_data(self, **kwargs) -> dict:
@@ -65,9 +74,13 @@ class WorkerDetailView(LoginRequiredMixin, BaseBreadcrumbMixin, DetailView):
     model = WorkerUser
     template_name = "registration/profile.html"
     queryset = WorkerUser.objects.prefetch_related(
-        "workers_projects",
-        "workers_projects__project_lead",
-        "lead_projects",
+        Prefetch(
+            "worker_tasks__project_tasks",
+            queryset=Project.objects.all().prefetch_related(
+                "responsible_workers",
+            ).select_related("project_lead"),
+        ),
+        "worker_tasks__responsible_workers",
     )
     context_object_name = "worker"
 
@@ -80,9 +93,6 @@ class WorkerDetailView(LoginRequiredMixin, BaseBreadcrumbMixin, DetailView):
     def get_context_data(self, **kwargs) -> dict:
         context = super(WorkerDetailView, self).get_context_data(**kwargs)
         user = self.object
-
-        context["worker_projects"] = user.workers_projects.all()
-        context["lead_projects"] = user.lead_projects.all()
 
         if user.id != self.request.user.id:
             context["display_position"] = user.position
