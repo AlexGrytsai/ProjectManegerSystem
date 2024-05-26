@@ -2,10 +2,10 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.core.exceptions import PermissionDenied
-from django.db.models import Q
 from django.db.models import Count
-from django.db.models import QuerySet
 from django.db.models import Prefetch
+from django.db.models import Q
+from django.db.models import QuerySet
 from django.http import HttpRequest
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
@@ -16,7 +16,6 @@ from django.views.generic import DetailView
 from django.views.generic import ListView
 from django.views.generic import TemplateView
 from django.views.generic import UpdateView
-from view_breadcrumbs import BaseBreadcrumbMixin
 
 from projects.models import Project, Task
 from .forms import AddWorkerForm
@@ -47,18 +46,12 @@ class RegisterView(CreateView):
 class AddWorkerView(
     LoginRequiredMixin,
     UserPassesTestMixin,
-    BaseBreadcrumbMixin,
     CreateView
 ):
     model = WorkerUser
     form_class = AddWorkerForm
     success_url = reverse_lazy("users:worker-list")
     template_name = "users/worker_form.html"
-    crumbs = [
-        ("", "Home"),
-        ("My CoWorkers", reverse_lazy("users:worker-list")),
-        ("Add new Worker", "")
-    ]
 
     def test_func(self) -> bool:
         return self.request.user.role == "Supervisor"
@@ -70,7 +63,7 @@ class AddWorkerView(
         return context
 
 
-class WorkerDetailView(LoginRequiredMixin, BaseBreadcrumbMixin, DetailView):
+class WorkerDetailView(LoginRequiredMixin, DetailView):
     model = WorkerUser
     template_name = "registration/profile.html"
     queryset = WorkerUser.objects.prefetch_related(
@@ -83,12 +76,6 @@ class WorkerDetailView(LoginRequiredMixin, BaseBreadcrumbMixin, DetailView):
         "worker_tasks__responsible_workers",
     )
     context_object_name = "worker"
-
-    crumbs = [
-        ("", "Home"),
-        ("My CoWorkers", reverse_lazy("users:worker-list")),
-        ("Profile", "")
-    ]
 
     def get_context_data(self, **kwargs) -> dict:
         context = super(WorkerDetailView, self).get_context_data(**kwargs)
@@ -116,19 +103,11 @@ class WorkerDetailView(LoginRequiredMixin, BaseBreadcrumbMixin, DetailView):
 class WorkerUpdateView(
     LoginRequiredMixin,
     UserPassesTestMixin,
-    BaseBreadcrumbMixin,
     UpdateView
 ):
     model = WorkerUser
     form_class = WorkerUserUpdateForm
     template_name = "users/worker_form.html"
-
-    crumbs = [
-        ("", "Home"),
-        ("My CoWorkers", reverse_lazy("users:worker-list")),
-        ("Profile", ""),
-        ("Edit", "")
-    ]
 
     def test_func(self) -> bool:
         return (
@@ -159,13 +138,11 @@ class WorkerUpdateView(
         )
 
 
-class WorkerListView(LoginRequiredMixin, BaseBreadcrumbMixin, ListView):
+class WorkerListView(LoginRequiredMixin, ListView):
     model = WorkerUser
     template_name = "users/worker_list.html"
     context_object_name = "worker_list"
     paginate_by = 10
-
-    crumbs = [("", "Home"), ("My CoWorkers", ""), ]
 
     def get_context_data(self, *, object_list=None, **kwargs) -> dict:
         context = super(WorkerListView, self).get_context_data(**kwargs)

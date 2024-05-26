@@ -1,4 +1,3 @@
-{% load view_breadcrumbs %}
 <nav
     class="navbar navbar-top navbar-expand navbar-dark bg-primary border-bottom">
   <div class="container-fluid">
@@ -7,9 +6,6 @@
         <div class="col-lg-auto col-7">
           <nav aria-label="breadcrumb"
                class="d-none d-md-inline-block ml-md-4">
-              {% block breadcrumbs %}
-                {% render_breadcrumbs %}
-              {% endblock %}
           </nav>
         </div>
       </div>

@@ -20,7 +20,6 @@ django-bootstrap4==24.3
 django-crispy-forms==2.1
 django-debug-toolbar==4.3.0
 django-storages==1.14.2
-django-view-breadcrumbs==2.5.1
 flake8==7.0.0
 idna==3.7
 isort==5.13.2

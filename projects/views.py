@@ -11,7 +11,6 @@ from django.views.generic import DeleteView
 from django.views.generic import DetailView
 from django.views.generic import ListView
 from django.views.generic import UpdateView
-from view_breadcrumbs import BaseBreadcrumbMixin
 
 from .forms import CommentCreatForm
 from .forms import ProjectCreateForm
@@ -28,18 +27,11 @@ from .project_mixins import TaskMixin
 class ProjectCreateView(
     LoginRequiredMixin,
     UserPassesTestMixin,
-    BaseBreadcrumbMixin,
     CreateView
 ):
     model = Project
     form_class = ProjectCreateForm
     template_name = "projects/project_form.html"
-
-    crumbs = [
-        ("", "Home"),
-        ("Projects", reverse_lazy("projects:project-list")),
-        ("Add new Worker", "")
-    ]
 
     def test_func(self) -> bool:
         return self.request.user.role == "Supervisor"
@@ -66,14 +58,12 @@ class ProjectCreateView(
         return reverse_lazy("/")
 
 
-class ProjectListView(LoginRequiredMixin, BaseBreadcrumbMixin, ListView):
+class ProjectListView(LoginRequiredMixin, ListView):
     model = Project
     template_name = "projects/project_list.html"
     context_object_name = "project_list"
     queryset = Project.objects.prefetch_related("responsible_workers", "tasks")
     paginate_by = 10
-
-    crumbs = [("", "Home"), ("Projects", "")]
 
     @staticmethod
     def get_annotate_params() -> dict:
