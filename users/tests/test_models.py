@@ -27,7 +27,8 @@ class WorkerUserModelTest(TestCase):
 
     def test_get_absolute_url(self):
         self.assertEqual(
-            self.user.get_absolute_url(), f"/accounts/profile/{self.user.pk}/"
+            self.user.get_absolute_url(),
+            f"/accounts/profile/{self.user.pk}/"
         )
 
     def test_clean_method_valid_phone_number(self):

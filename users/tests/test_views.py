@@ -1,8 +1,7 @@
 from django.http import HttpResponseForbidden
+from django.test import Client
 from django.test import TestCase
 from django.urls import reverse
-from django.contrib.auth.models import User
-from django.test import Client
 
 from users.models import WorkerUser
 

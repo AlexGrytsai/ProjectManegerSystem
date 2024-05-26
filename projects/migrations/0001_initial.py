@@ -6,7 +6,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -109,7 +108,8 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "comments",
-                    models.ManyToManyField(related_name="tasks", to="projects.comment"),
+                    models.ManyToManyField(related_name="tasks",
+                                           to="projects.comment"),
                 ),
                 (
                     "responsible_workers",
@@ -168,7 +168,8 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "tasks",
-                    models.ManyToManyField(related_name="projects", to="projects.task"),
+                    models.ManyToManyField(related_name="projects",
+                                           to="projects.task"),
                 ),
             ],
             options={

@@ -9,15 +9,12 @@ https://docs.djangoproject.com/en/5.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
-import os
 from pathlib import Path
 
 from credentials import aws_postgres
 from credentials import aws_s3
-from credentials import social_auth
 from credentials import djanogo
-
-from users.middleware.update_last_activity import UpdateLastActivityMiddleware
+from credentials import social_auth
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent

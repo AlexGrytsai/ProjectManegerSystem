@@ -6,7 +6,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("projects", "0002_alter_project_options_and_more"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
@@ -38,7 +37,8 @@ class Migration(migrations.Migration):
             model_name="project",
             name="tasks",
             field=models.ManyToManyField(
-                blank=True, null=True, related_name="projects", to="projects.task"
+                blank=True, null=True, related_name="projects",
+                to="projects.task"
             ),
         ),
     ]
