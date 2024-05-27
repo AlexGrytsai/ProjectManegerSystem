@@ -108,11 +108,9 @@ class Project(models.Model):
     responsible_workers = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
         related_name="workers_projects",
-        blank=True,
-        null=True
     )
     tasks = models.ManyToManyField(
-        Task, related_name="project_tasks", blank=True, null=True
+        Task, related_name="project_tasks"
     )
 
     class Meta:
