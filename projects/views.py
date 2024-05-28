@@ -48,7 +48,7 @@ class ProjectCreateView(
         next_url = self.request.GET.get("next")
         if next_url:
             context["referer"] = next_url
-        context["is_update"] = True
+        context["is_update"] = False
         return context
 
     def get_success_url(self) -> str:
