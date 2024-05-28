@@ -52,10 +52,7 @@ class ProjectCreateView(
         return context
 
     def get_success_url(self) -> str:
-        next_url = self.request.GET.get("next")
-        if next_url:
-            return next_url
-        return reverse_lazy("/")
+        return reverse_lazy("users:index")
 
 
 class ProjectListView(LoginRequiredMixin, ListView):
