@@ -37,7 +37,7 @@ urlpatterns = [
         name="delete-project"
     ),
     path(
-        "projects/<int:pk>/detail",
+        "projects/<int:pk>/detail/",
         ProjectDetailView.as_view(),
         name="project-detail"
     ),
