@@ -201,14 +201,14 @@
             <!-- Description -->
             <h6 class="heading-small text-muted mb-4">My projects</h6>
             <div class="pl-lg-4">
-              {% if projects %}
+              {% if worker.workers_projects.all %}
                 <table class="table table-bordered mt-4">
                   <thead>
                   <tr style="width: 20rem"></tr>
                   </thead>
                   <tbody class="table-group-divider">
                   <tr class="table-light">
-                    {% for project in projects %}
+                    {% for project in worker.workers_projects.all %}
                       <td>
                         {% include 'includes/project_card_profile.html' %}
                       </td>
