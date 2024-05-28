@@ -1,11 +1,10 @@
-from django.core.exceptions import PermissionDenied
+from django.http import HttpResponseRedirect
 from django.test import TestCase, RequestFactory
 from django.urls import reverse
-from django.http import HttpResponseRedirect, HttpResponseForbidden
-from django.contrib.auth import get_user_model
+
+from projects.forms import ProjectCreateForm
 from projects.models import Project
 from projects.views import ProjectCreateView
-from projects.forms import ProjectCreateForm
 from users.models import WorkerUser
 
 
