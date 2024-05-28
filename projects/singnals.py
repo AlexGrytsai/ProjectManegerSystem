@@ -52,7 +52,21 @@ def update_project_update_fild_after_update_task(
         **kwargs
 ) -> None:
     if instance.pk:
-        print("task update")
         related_project = instance.project_tasks.first()
         if related_project:
             related_project.save(update_fields=["updated"])
+
+
+@receiver(pre_delete, sender="projects.Project")
+def delete_related_tasks_and_comments_after_delete_project(
+        sender: "projects.Project",
+        instance: "projects.Project",
+        **kwargs
+) -> None:
+    tasks = instance.tasks.all()
+    for task in tasks:
+        comments = task.comments.all()
+        for comment in comments:
+            comment.delete()
+
+        task.delete()
