@@ -18,11 +18,11 @@ from django.views.generic import TemplateView
 from django.views.generic import UpdateView
 
 from projects.models import Project, Task
-from .forms import AddWorkerForm
-from .forms import RegisterForm
-from .forms import WorkerSearchForm
-from .forms import WorkerUserUpdateForm
-from .models import WorkerUser
+from users.forms import AddWorkerForm
+from users.forms import RegisterForm
+from users.forms import WorkerSearchForm
+from users.forms import WorkerUserUpdateForm
+from users.models import WorkerUser
 
 
 class IndexView(LoginRequiredMixin, TemplateView):

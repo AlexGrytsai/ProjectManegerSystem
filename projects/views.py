@@ -12,16 +12,16 @@ from django.views.generic import DetailView
 from django.views.generic import ListView
 from django.views.generic import UpdateView
 
-from .forms import CommentCreatForm
-from .forms import ProjectCreateForm
-from .forms import ProjectUpdateForm
-from .forms import TaskCreateForm
-from .forms import TaskUpdateForm
-from .models import Comment
-from .models import Project
-from .models import TackStatus
-from .models import Task
-from .project_mixins import TaskMixin
+from projects.forms import CommentCreatForm
+from projects.forms import ProjectCreateForm
+from projects.forms import ProjectUpdateForm
+from projects.forms import TaskCreateForm
+from projects.forms import TaskUpdateForm
+from projects.models import Comment
+from projects.models import Project
+from projects.models import TackStatus
+from projects.models import Task
+from projects.project_mixins import TaskMixin
 
 
 class ProjectCreateView(

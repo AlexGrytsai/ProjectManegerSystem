@@ -1,8 +1,11 @@
 from django import forms
 from django.db.models import Q
 
-from users.models import WorkerUser, Role
-from .models import Project, Task, Comment
+from projects.models import Comment
+from projects.models import Project
+from projects.models import Task
+from users.models import Role
+from users.models import WorkerUser
 
 
 class ProjectCreateForm(forms.ModelForm):

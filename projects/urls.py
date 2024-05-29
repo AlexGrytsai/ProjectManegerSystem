@@ -1,20 +1,21 @@
 from django.urls import path
 
+from projects.views import CommentCreatView
+from projects.views import CommentDeleteView
+from projects.views import CommentUpdateView
+from projects.views import ProjectCreateView
+from projects.views import ProjectDeleteView
+from projects.views import ProjectDetailTasksView
+from projects.views import ProjectDetailView
+from projects.views import ProjectListView
+from projects.views import ProjectUpdateView
+from projects.views import TaskCreateView
+from projects.views import TaskDeleteView
+from projects.views import TaskDetailView
+from projects.views import TaskListView
+from projects.views import TaskUpdateView
 from users.views import WorkerListView
 from users.views import toggle_assign_to_task
-from .views import CommentCreatView, CommentDeleteView
-from .views import CommentUpdateView
-from .views import ProjectCreateView
-from .views import ProjectDeleteView
-from .views import ProjectDetailTasksView
-from .views import ProjectDetailView
-from .views import ProjectListView
-from .views import ProjectUpdateView
-from .views import TaskCreateView
-from .views import TaskDeleteView
-from .views import TaskDetailView
-from .views import TaskListView
-from .views import TaskUpdateView
 
 urlpatterns = [
     path("projects/create/",

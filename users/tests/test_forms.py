@@ -1,10 +1,15 @@
 from django.test import TestCase
-from users.models import WorkerUser, Role, Position
+
 from users.forms import (
     RegisterForm,
     AddWorkerForm,
     WorkerUserUpdateForm,
     WorkerSearchForm,
+)
+from users.models import (
+    Position,
+    Role,
+    WorkerUser
 )
 
 

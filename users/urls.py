@@ -1,7 +1,7 @@
 from django.urls import include
 from django.urls import path
 
-from .views import (
+from users.views import (
     IndexView,
     AddWorkerView,
     RegisterView,
