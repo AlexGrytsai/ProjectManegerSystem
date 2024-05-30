@@ -1,0 +1,12 @@
+{% load bootstrap4 %}
+{% load crispy_forms_filters %}
+
+<form method="get" action="" class="navbar-search-light form-inline" role="search">
+  {{ search_form|crispy }}
+    <button type="button" 
+            class="close" 
+            data-action="search-close" 
+            data-target="#navbar-search-main" 
+            aria-label="Close">
+  </button>
+</form>

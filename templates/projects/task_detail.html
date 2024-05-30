@@ -1,0 +1,173 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}Task Detail{% endblock title %}
+
+{% block content %}
+  <div class="header pb-6 d-flex align-items-center"
+       style="min-height: 150px; background-size: cover; background-position: center top;">
+    <!-- Mask -->
+    <span class="mask bg-gradient-default opacity-8"></span>
+    <!-- Header container -->
+  </div>
+  <!-- Page content -->
+  <div class="container-fluid mt--7">
+    <div class="row justify-content-center">
+      <div class="col-xl-5 order-xl-1">
+        <div class="card mx-auto">
+          <div class="card-body">
+            <div class="pl-lg-4">
+              <div class="order-xl-5">
+                <div class="row">
+                  <div class="col-lg-6">
+                    <div class="form-group">
+                      <ul class="nav nav-pills nav-fill">
+                        <li class="nav-item">
+                          <a class="btn btn-outline-primary"
+                             href="{% url 'projects:project-task-list' project.id %}">
+                            Back
+                          </a>
+                        </li>
+                        <li class="nav-item">
+                          {% if request.user in responsible_workers %}
+                            {% include "includes/assign_task.html" %}
+                          {% endif %}
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="col-lg-6">
+                    <div class="d-flex justify-content-end align-items-center">
+                      {% if request.user.role == "Supervisor" %}
+                        <a href="{% url 'projects:task-update' project.id task.id %}?next={{ request.path }}"
+                           class="btn btn-primary">
+                          Edit task
+                        </a>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+                <hr class="my-2"/>
+                <h6 class="heading-small text-muted mb-4">
+                  Task detail
+                </h6>
+                <div class="pl-lg-1">
+                  <div class="row">
+                    <div class="col-lg-6">
+                      <div class="form-group">
+                        <label class="form-control-label">Task name</label>
+                        <a class="form-control">{{ object.name }}</a>
+                      </div>
+                    </div>
+                    <div class="col-lg-4">
+                      <div class="form-group">
+                        <label class="form-control-label">Status</label>
+                        <a class="form-control">{{ object.status }}</a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-lg-4">
+                      <div class="form-group">
+                        <label class="form-control-label">Last update</label>
+                        <a class="form-control">{{ object.updated|date:"Y, F j H:i" }}</a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-lg-6">
+                      <div class="form-group">
+                        <label class="form-control-label">Author</label>
+                        <a class="form-control">{{ object.author }}</a>
+                      </div>
+                    </div>
+                    <div class="col-lg-4">
+                      <div class="form-group">
+                        <label class="form-control-label">Deadline</label>
+                        <a class="form-control">{{ object.deadline }}</a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-lg-10">
+                      <div class="form-group">
+                        <label class="form-control-label">Description</label>
+                        <textarea class="form-control" rows="6"
+                                  disabled>{{ object.description }}
+                </textarea>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-lg-10">
+                      <div class="form-group">
+                        <label class="form-control-label">
+                          Responsible workers
+                        </label>
+                        {% if object.responsible_workers %}
+                          {% for worker in object.responsible_workers.all %}
+                            <a href="{% url 'users:worker-detail' pk=worker.id %}"
+                               class="form-control mt-2">
+                              {% if worker.first_name %}
+                                {{ worker.first_name }}
+                                {{ worker.first_name }}
+                                ({{ worker.position }})
+                              {% else %}
+                                {{ worker.username }} (
+                                {{ worker.position }})
+                              {% endif %}
+                            </a>
+                          {% endfor %}
+                        {% endif %}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-lg-10">
+                      <div class="form-group">
+                        <label class="form-control-label">
+                          Comments
+                        </label>
+                        {% if request.user in responsible_workers %}
+                          <a href="{% url 'projects:comment-create' project.id task.id %}?next={{ request.path }}%}"
+                             class="btn btn-outline-success">
+                            +
+                          </a>
+                        {% endif %}
+                        <hr class="my-1"/>
+                        {% if object.comments %}
+                          {% for comment in object.comments.all %}
+                            <p>{{ comment.text|linebreaksbr }}</p>
+                            <strong>Author:</strong> {{ comment.author }}<br>
+                            <strong>Created:</strong>
+                            {{ comment.created|date:"Y, F j H:i" }}
+                            {% if request.user.role == "Supervisor" %}
+                              <div>
+                                <a href="{% url 'projects:comment-update' project.id task.id comment.id %}?next={{ request.path }}">
+                                  Edit
+                                </a>
+                                <a href="{% url 'projects:comment-delete' project.id task.id comment.id %}?next={{ request.path }}">
+                                  Delete
+                                </a>
+                              </div>
+                            {% endif %}
+                            <hr class="my-1"/>
+                          {% endfor %}
+                        {% endif %}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <hr class="my-4"/>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+{% endblock content %}
+
+<!-- Specific JS goes HERE -->
+{% block javascripts %}{% endblock javascripts %}

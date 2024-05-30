@@ -1,0 +1,144 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}My CoWorkers{% endblock title %}
+
+{% block content %}
+
+  <div class="header pb-6 d-flex align-items-center"
+       style="min-height: 300px; background-size: cover; background-position: center top;">
+    <!-- Mask -->
+    <span class="mask bg-gradient-default opacity-8"></span>
+    <div class="container-fluid d-flex align-items-center">
+      <div class="row" style="white-space: nowrap">
+        <div class="col-lg-7 col-md-10">
+          <h1 class="display-2 text-white">
+            {% if project %}
+              Responsible workers in {{ project.name }}
+            {% else %}
+              My CoWorkers
+            {% endif %}
+          </h1>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Page content -->
+  <div class="container-fluid mt--9">
+  <div class="row">
+    <div class="col-xl-12 order-xl-1">
+      <div class="card">
+        <div class="card-body">
+          <form>
+            <div class="pl-lg-4">
+              <div class="row">
+                <div class="container-fluid">
+                  <div class="row">
+                    <div class="col-lg-4 col-md-4 d-flex align-items-center">
+                      <div class="text-left">
+                        <strong>Total workers:</strong>
+                        {% if project %}
+                          {{ project.responsible_workers.count }}
+                        {% else %}
+                          {{ total_workers }}
+                        {% endif %}
+                      </div>
+                    </div>
+                    <div
+                        class="col-lg-4 col-md-4 d-flex justify-content-center align-items-center">
+                      {% if not project %}
+                        <div>
+                          {% include 'includes/search.html' %}
+                        </div>
+                      {% endif %}
+                    </div>
+                    {% if not project %}
+                      <div
+                          class="col-lg-4 col-md-4 d-flex justify-content-end align-items-center">
+                        {% if object.id == request.user.id or request.user.role == "Supervisor" %}
+                          <a href="{% url 'users:add-worker' %}"
+                             class="btn btn-success">
+                            Add new Worker
+                          </a>
+                        {% endif %}
+                      </div>
+                    {% endif %}
+                  </div>
+                </div>
+                {% if worker_list %}
+                  <table class="table table-striped mt-4">
+                    <tr class="text-center">
+                      <th>ID</th>
+                      <th>Username</th>
+                      <th>First name</th>
+                      <th>Last name</th>
+                      <th>Position</th>
+                      <th>Num of projects</th>
+                      {% if request.user.role == "Supervisor" %}
+                        <th>Role</th>
+                        <th>Active account</th>
+                        <th>Edite</th>
+                      {% endif %}
+                    </tr>
+                    {% for worker in worker_list %}
+                      <tr
+                          {% if worker.id == request.user.id %}
+                            class="text-center table-success"
+                          {% endif %}
+                          {% if not worker.is_active %}
+                            class="text-center table-danger"
+                          {% else %}
+                            class="text-center"
+                          {% endif %}>
+                      <td>{{ worker.id }}</td>
+                      <td>
+                        <a class="link-primary"
+                           href="{{ worker.get_absolute_url }}">
+                          {{ worker.username }}
+                        </a>
+                      </td>
+                      <td>{{ worker.first_name }}</td>
+                      <td>{{ worker.last_name }}</td>
+                      <td>{{ worker.position }}</td>
+                      {% if worker.role == "Supervisor" %}
+                        <td>{{ worker.lead_project_count }}</td>
+                      {% else %}
+                        <td>{{ worker.worker_project_count }}</td>
+                      {% endif %}
+                      {% if request.user.role == "Supervisor" %}
+                        <td>{{ worker.role }}</td>
+                        <td>
+                          {% if worker.is_active %}
+                            <span style="color: green;">&#10004;</span>
+                          {% else %}
+                            <span style="color: red;">&#10060;</span>
+                          {% endif %}
+                        </td>
+                        <td><a
+                            href="{% url 'users:worker-update' pk=worker.id %}?next={{ request.path }}"
+                            class="btn btn-outline-success">Edit profile</a>
+                        </td>
+                      {% endif %}
+                    {% endfor %}
+                    </tr>
+                  </table>
+                {% else %}
+                  <p>There are no coworkers in the service.</p>
+                {% endif %}
+              </div>
+              <hr class="my-4"/>
+              <div class="text-center mx-auto">
+                {% include 'includes/pagination.html' %}
+              </div>
+            </div>
+        </div>
+      </div>
+    </div>
+
+    {#    {% include "includes/footer.html" %}#}
+
+  </div>
+
+{% endblock content %}
+
+<!-- Specific JS goes HERE -->
+{% block javascripts %}{% endblock javascripts %}

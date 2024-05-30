@@ -1,0 +1,46 @@
+{% extends 'layouts/base.html' %}
+{% load crispy_forms_filters %}
+
+{% block title %}
+  {% if is_update %}
+    Update the task
+  {% else %}
+    Create a new task
+  {% endif %}
+{% endblock title %}
+
+{% block content %}
+  <div class="row justify-content-center">
+    <div class="col-xl-6">
+      <div class="card">
+        <div class="card-body">
+          <h2 class="text-muted mb-4"
+              style="display: flex; justify-content: space-between; align-items: center;">
+            <strong>
+              {% if is_update %}
+                Update the task
+                {% if project.id %}
+                  <a href="{% url 'projects:task-delete' project.id task.id %}"
+                     class="btn btn-danger link-to-page">
+                    Delete
+                  </a>
+                {% endif %}
+              {% else %}
+                Create a new task
+              {% endif %}
+            </strong>
+          </h2>
+          <form action="" method="post" novalidate
+                enctype="multipart/form-data" novalidate>
+            {% csrf_token %}
+            {{ form|crispy }}
+            <div>
+              <input type="submit" value="Save" class="btn btn-primary">
+              <a href="{{ referer }}" class="btn btn-danger">Cancel</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,122 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}All Tasks{% endblock title %}
+
+{% block content %}
+
+  <div class="header pb-6 d-flex align-items-center"
+       style="min-height: 300px; background-size: cover; background-position: center top;">
+    <!-- Mask -->
+    <span class="mask bg-gradient-default opacity-8"></span>
+    <div class="container-fluid d-flex align-items-center">
+      <div class="row" style="white-space: nowrap">
+        <div class="col-lg-7 col-md-10">
+          <h1 class="display-2 text-white">
+            All Tasks
+          </h1>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Page content -->
+  <div class="container-fluid mt--9">
+  <div class="row">
+    <div class="col-xl-12 order-xl-1">
+      <div class="card">
+        <div class="card-body">
+          <form>
+            <div class="pl-lg-4">
+              <div class="row">
+                {% if task_list %}
+                  <table class="table table-bordered border-primary">
+                    <thead class="table-primary">
+                    <tr class="text-center">
+                      <th class="col-3">Created</th>
+                      <th class="col-3">In progress</th>
+                      <th class="col-3">Checking</th>
+                      <th class="col-3">Done</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                      <td>
+                        {% for task in task_list %}
+                          {% for project in task.project_tasks.all %}
+                            {% if task.status == "Created" %}
+                              {% include "includes/task_card.html" %}
+                              <br>
+                            {% endif %}
+                          {% endfor %}
+                        {% endfor %}
+                      </td>
+                      <td>
+                        {% for task in task_list %}
+                          {% for project in task.project_tasks.all %}
+                            {% if task.status == "In progress" %}
+                              {% include "includes/task_card.html" %}
+                              <br>
+                            {% endif %}
+                          {% endfor %}
+                        {% endfor %}
+                      </td>
+                      <td>
+                        {% for task in task_list %}
+                          {% for project in task.project_tasks.all %}
+                            {% if task.status == "Checking" %}
+                              {% include "includes/task_card.html" %}
+                              <br>
+                            {% endif %}
+                          {% endfor %}
+                        {% endfor %}
+                      </td>
+                      <td>
+                        {% for task in object.tasks.all %}
+                          {% for project in task.project_tasks.all %}
+                            {% if task.status == "Done" %}
+                              {% include "includes/task_card.html" %}
+                              <br>
+                            {% endif %}
+                          {% endfor %}
+                        {% endfor %}
+                      </td>
+                    </tr>
+                    </tbody>
+                  </table>
+                  {#                  <table class="table table-bordered mt-4">#}
+                  {#                    <thead>#}
+                  {#                    <tr style="width: 20rem"></tr>#}
+                  {#                    </thead>#}
+                  {#                    <tbody class="table-group-divider">#}
+                  {#                    <tr class="table-light">#}
+                  {#                      {% for task in task_list %}#}
+                  {#                        {% for project in task.project_tasks.all %}#}
+                  {#                        <td>#}
+                  {#                          {% include 'includes/task_card.html' %}#}
+                  {#                        </td>#}
+                  {#                        {% if forloop.counter|divisibleby:4 and not forloop.last %}#}
+                  {#                          </tr>#}
+                  {#                          <tr class="table-light">#}
+                  {#                        {% endif %}#}
+                  {#                          {% endfor %}#}
+                  {#                      {% endfor %}#}
+                  {#                      </tr>#}
+                  {#                    </tbody>#}
+                  {#                  </table>#}
+                {% else %}
+                  <p>There are no tasks in the service.</p>
+                {% endif %}
+              </div>
+              <hr class="my-4"/>
+              <div class="text-center mx-auto">
+                {% include 'includes/pagination.html' %}
+              </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock content %}
+
+<!-- Specific JS goes HERE -->
+{% block javascripts %}{% endblock javascripts %}
