@@ -12,9 +12,9 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 import os
 from pathlib import Path
 
+import dj_database_url
 from dotenv import load_dotenv
 
-from credentials import aws_postgres
 from credentials import aws_s3
 
 load_dotenv()
@@ -92,32 +92,20 @@ WSGI_APPLICATION = "ProjectManagerSystem.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
-#
 
-AWS_RDS = False
-
-if AWS_RDS:
-    # Postgres
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.postgresql_psycopg2",
-            "NAME": aws_postgres.db_name,
-            "USER": aws_postgres.master_username,
-            "PASSWORD": aws_postgres.password,
-            "HOST": aws_postgres.endpoint,
-            "PORT": aws_postgres.port,
-        }
-    }
-
-    # For Django Social Auth(need use with Postgres)
-    SOCIAL_AUTH_JSONFIELD_ENABLED = True
-else:
-    DATABASES = {
+DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
             "NAME": BASE_DIR / "db.sqlite3",
         }
     }
+
+db_from_env = dj_database_url.config(conn_max_age=500)
+DATABASES["default"].update(db_from_env)
+
+# For Django Social Auth(need use with Postgres)
+SOCIAL_AUTH_JSONFIELD_ENABLED = True
+
 
 # Password management in Django
 # https://docs.djangoproject.com/en/5.0/topics/auth/passwords/
