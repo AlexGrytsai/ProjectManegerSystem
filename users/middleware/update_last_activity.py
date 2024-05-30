@@ -11,8 +11,12 @@ class UpdateLastActivityMiddleware:
         response = self.get_response(request)
 
         if request.user.is_authenticated:
-            time_delta = now() - request.user.last_activity
-            if time_delta.total_seconds() >= 600:
+            if request.user.last_activity:
+                time_delta = now() - request.user.last_activity
+                if time_delta.total_seconds() >= 600:
+                    request.user.last_activity = now()
+                    request.user.save(update_fields=["last_activity"])
+            else:
                 request.user.last_activity = now()
                 request.user.save(update_fields=["last_activity"])
 
