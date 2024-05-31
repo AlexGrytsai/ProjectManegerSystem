@@ -15,8 +15,6 @@ from pathlib import Path
 import dj_database_url
 from dotenv import load_dotenv
 
-from credentials import aws_s3
-
 load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
