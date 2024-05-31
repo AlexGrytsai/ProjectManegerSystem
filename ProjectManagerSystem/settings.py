@@ -177,9 +177,9 @@ STATIC_ROOT = "staticfiles/"
 AWS_S3 = False
 
 if AWS_S3:
-    AWS_ACCESS_KEY_ID = aws_s3.access_key
-    AWS_SECRET_ACCESS_KEY = aws_s3.secret_key
-    AWS_STORAGE_BUCKET_NAME = aws_s3.bucket_name
+    AWS_ACCESS_KEY_ID = os.environ.get("S3_ACCESS_KEY")
+    AWS_SECRET_ACCESS_KEY = os.environ.get("S3_SECRET_KEY")
+    AWS_STORAGE_BUCKET_NAME = os.environ.get("S3_BUCKET_NAME")
     AWS_DEFAULT_ACL = None
     AWS_S3_CUSTOM_DOMAIN = "%s.s3.amazonaws.com" % AWS_STORAGE_BUCKET_NAME
     AWS_S3_OBJECT_PARAMETERS = {
