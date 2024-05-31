@@ -93,7 +93,7 @@
                       <td>
                         {% for task in object.tasks.all %}
                           {% if task.status == "Done" %}
-                           {% include "includes/task_card.html" %}
+                            {% include "includes/task_card.html" %}
                             <br>
                           {% endif %}
                         {% endfor %}
