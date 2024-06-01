@@ -39,7 +39,7 @@ class WorkerUserUpdateForm(forms.ModelForm):
             "is_active",
             "phone_number",
             "telegram",
-            "photo",
+            # "photo",
         )
 
     def __init__(self, *args, **kwargs):
