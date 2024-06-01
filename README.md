@@ -17,6 +17,7 @@ task creation, assignment, and tracking.
 You can try the service with a guest account:
 **Login:** Guest
 **Password:** Guest!123456
+
 This account has more advanced capabilities on the site than just a new registered user. 
 If you register a new user, a lot of information will be hidden for him.
   
