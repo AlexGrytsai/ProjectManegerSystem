@@ -12,11 +12,13 @@ Developers, Designers, Project Managers, and QA specialists, the task manager
 aims to streamline project development by providing a centralized platform for  
 task creation, assignment, and tracking.  
 
-[projectmanegersystem.onrender.com](projectmanegersystem.onrender.com)
+<https://projectmanegersystem.onrender.com/>
 
 You can try the service with a guest account:
 **Login:** Guest
 **Password:** Guest!123456
+This account has more advanced capabilities on the site than just a new registered user. 
+If you register a new user, a lot of information will be hidden for him.
   
 
 ## Features
